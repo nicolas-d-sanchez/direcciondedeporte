@@ -1,0 +1,118 @@
+<template>
+  <v-container v-resize="onResize">
+    <v-app-bar app color="white" height="70" flat>
+      <v-avatar  class="mr-3" color="grey lighten-5" size="70">
+        <v-img contain max-height="100%" src="@/assets/logo.png"></v-img>
+      </v-avatar>
+
+      <v-toolbar-title
+        class="font-weight-black headline"
+        v-show="windowSize.x>650"
+      >Direccion de Deporte UNNE</v-toolbar-title>
+
+      <v-toolbar-title class="font-weight-black headline" v-show="windowSize.x<650">UNNE</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+    </v-app-bar>
+
+    <v-navigation-drawer app permanent expand-on-hover>
+      <v-list>
+        <v-list-item class="px-2">
+          <v-list-item-avatar>
+            <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+          </v-list-item-avatar>
+        </v-list-item>
+
+        <v-list-item link>
+          <v-list-item-content>
+            <v-list-item-title class="title">{{this.user.userEmail}}</v-list-item-title>
+            <v-list-item-subtitle>{{this.user.userEmail}}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <v-list nav dense>
+        <v-list-item v-for="item in items" :key="item.text" :to="item.link">
+          <v-list-item-icon>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{item.text}}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block text @click="CerrarSesion">Logout</v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+
+    <v-content>
+      <router-view />
+    </v-content>
+  </v-container>
+</template>
+
+
+
+<script>
+
+import firebase from 'firebase'
+export default {
+  name: "Panel",
+  components: {},
+  data() {
+    return {
+       user: [
+          {userEmail:"", userName:"",}         
+        ],
+      windowSize: {
+        x: 0,
+        y: 0,
+       
+      },
+
+      items: [
+        { text: "Principal", icon: "mdi-home-circle", link: "/" },
+        { text: "Panel Alumnos", icon: "mdi-account", link: "/Panel/Alumnos" },
+        {
+          text: "Panel Usuarios",
+          icon: "mdi-account-edit",
+          link: "/Panel/Usuarios"
+        }
+      ]
+    };
+  },
+
+  mounted() {
+    this.onResize();
+    this.mostrasUsuario()
+  },
+
+  methods: {
+    onResize() {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+    },
+
+    mostrasUsuario(){
+      this.user.userEmail= firebase.auth().currentUser.email
+      this.userName= firebase.auth().currentUser.email
+    },
+
+    CerrarSesion() {
+      firebase
+        .auth()
+        .signOut()
+        .then(()=> {
+          // Sign-out successful.
+          alert(`Hasta la proxima`);
+          this.$router.push("/");
+        })
+        .catch(function(error) {
+          // An error happened.
+        });
+    }
+  }
+};
+</script>
