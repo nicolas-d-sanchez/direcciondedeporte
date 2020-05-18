@@ -1,8 +1,9 @@
 <template>
-  <v-row >
+  <v-row justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn text rounded  v-on="on">Agregar Alumno</v-btn>
+        <v-btn text rounded v-on="on">Agregar Alumno</v-btn>
+        
       </template>
       <v-card>
         <v-card-title>
@@ -25,7 +26,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field label="Email*" type="email" 
-                :rules="[rules.required, rules.email]"></v-text-field>
+               ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field label="Direccion*"  required></v-text-field>

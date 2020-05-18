@@ -13,8 +13,9 @@
       <v-flex md6>
         <v-img src="@/assets/Teamwork.jpg" max-height="300" max-width="300"></v-img>
       </v-flex>
-      <RegistroAlumnos />
+       <RegistroAlumnos/>
      <v-flex xs12>
+      
       <v-simple-table 
       height="400px">
         <template v-slot:default>
