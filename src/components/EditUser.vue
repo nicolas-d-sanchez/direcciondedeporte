@@ -2,7 +2,7 @@
   <v-row justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn text rounded v-on="on">Agregar Usuario</v-btn>
+        <v-btn text small v-on="on">Editar</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -24,6 +24,7 @@
                   required
                 ></v-text-field>
               </v-col>
+              
               <v-col cols="12">
                 <v-text-field
                   v-model="User.Email"
@@ -31,7 +32,7 @@
                   :rules="[rules.required,rules.email]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <!-- <v-col cols="12">
                 <v-text-field
                   v-model="User.password"
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -43,12 +44,12 @@
                   counter
                   @click:append="show1 = !show1"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
               <v-col cols="12" sm="6">
                 <v-text-field
                   v-model="User.dni"
                   label="DNI*"
-                  :rules="[rules.required]"
+                  :rules="[rules.required]"                  
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -67,6 +68,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
+      
           <v-btn color="blue darken-1" text @click="AgregarUser">Guardar</v-btn>
         </v-card-actions>
       </v-card>
@@ -78,22 +80,12 @@
 import { fb, db} from '@/components/FirebaseInit'
 
 export default {
-  
+  props:['User'],
   name: "RegistoUser",
   data() {
     return {
       dialog: false,
       show1: false,
-      
-      User: {    
-        dni:"",    
-        Nombre: "",
-        Apellido: "",
-        Email: "",
-        password: "",
-        TipoUser: ""
-      },
-
       rules: {
         required: value => !!value || "Required.",
         minPassword: v => v.length >= 8 || "Min 8 characters",

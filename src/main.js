@@ -3,13 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-import firebase from 'firebase';
+import {fb} from '@/components/FirebaseInit'
 import '@/components/FirebaseInit'
 
 Vue.config.productionTip = false
 
 let app;
-firebase.auth().onAuthStateChanged(user =>{
+fb.auth().onAuthStateChanged(user =>{
   if (!app){
     new Vue({
       iconfont: 'mdi' ,// 'md' || 'mdi' || 'fa' || 'fa4'

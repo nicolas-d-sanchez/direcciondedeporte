@@ -1,4 +1,8 @@
   // Your web app's Firebase configuration
+
+  import firebase from 'firebase';
+  require("firebase/firestore");
+
   var firebaseConfig = {
     apiKey: "AIzaSyASB8a99yJ0D5wQfbVZaORBOX2BrzC-HUU",
     authDomain: "dirdeporteunne.firebaseapp.com",
@@ -8,5 +12,7 @@
     messagingSenderId: "556952285720",
     appId: "1:556952285720:web:b58599e52d8b01fea8096d"
 };
-import firebase from 'firebase';
-firebase.initializeApp(firebaseConfig);
+
+const fb = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+export {db,fb}

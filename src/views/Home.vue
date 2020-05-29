@@ -360,7 +360,7 @@
 <script>
 
 import Login from "@/components/Login.vue";
-import firebase from 'firebase'
+import {fb} from '@/components/FirebaseInit'
 export default {
   name: 'Home',
   components: { Login },
@@ -414,7 +414,7 @@ export default {
     },
 
      CerrarSesion() {
-      firebase
+      fb
         .auth()
         .signOut()
         .then(()=> {
@@ -430,7 +430,7 @@ export default {
   created() {
     
    
-          this.logueado = firebase.auth().currentUser
+          this.logueado = fb.auth().currentUser
     
 
   },

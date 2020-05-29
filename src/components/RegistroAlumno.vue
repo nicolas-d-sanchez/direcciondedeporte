@@ -13,23 +13,22 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field label="LU*" type="number" required></v-text-field>
+                <v-text-field label="LU" v-model="DatosAlumnos.lu" type="number"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field label="DNI*" type="number" required></v-text-field>
+                <v-text-field label="DNI" v-model="DatosAlumnos.dni" type="number" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field label="Nombre*" required></v-text-field>
+                <v-text-field label="Nombre" v-model="DatosAlumnos.Nombre"  ></v-text-field>
               </v-col>             
               <v-col cols="12" sm="6" md="6">
-                <v-text-field label="Apellido*"  required></v-text-field>
+                <v-text-field label="Apellido" v-model="DatosAlumnos.Apellido" ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Email*" type="email" 
-               ></v-text-field>
+                <v-text-field label="Email" v-model="DatosAlumnos.Email" type="email" ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Direccion*"  required></v-text-field>
+                <v-text-field label="Direccion" v-model="DatosAlumnos.Direccion"  ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -38,7 +37,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="AgregarAlumno">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -46,23 +45,42 @@
 </template>
 
 <script>
+import { fb, db} from '@/components/FirebaseInit'
+
 
   export default {
       name: 'RegistroAlumnos',
     data () {
       return{
-        email:'',
-        rulesEmail: {
-          required: value => !!value || 'Required.',
-          counter: value => value.length <= 20 || 'Max 20 characters',
-          email: value => {
-            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid e-mail.'
-          },
+        DatosAlumnos:{
+        lu:"",
+        dni:"",
+        Nombre:"",
+        Apellido:"",
+        Email:"",
+        Direccion:""
         },
+       
+        
+        
         
         dialog: false
     }
+    },
+      methods: {
+    AgregarAlumno() {
+      db.collection("Alumnos").add(
+        this.DatosAlumnos
+        )
+        .then(function() {
+          window.location.reload();window.location.reload();
+          
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
     }
+  }
+
   }
 </script>

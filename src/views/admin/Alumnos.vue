@@ -32,13 +32,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in desserts" :key="item.LU">
-              <td>{{ item.lu }}</td>
-              <td>{{ item.dni }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.apellido }}</td>
-              <td>{{ item.email }}</td>
-              <td>{{ item.direccion }}</td>
+            <tr v-for="item in Alumnos" :key="item.LU">
+              <td>{{ item.LU }}</td>
+              <td>{{ item.DNI }}</td>
+              <td>{{ item.Nombre }}</td>
+              <td>{{ item.Apellido }}</td>
+              <td>{{ item.Email }}</td>
+              <td>{{ item.Direccion }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
                 <v-btn text small text-center  @click.stop="dialog = true">Generar credencial</v-btn> 
@@ -92,6 +92,8 @@
 
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
+import { fb, db} from '@/components/FirebaseInit.js';
+
 
 export default {
   components: { RegistroAlumnos },
@@ -100,95 +102,21 @@ export default {
 data() {
     return {
         dialog: false,
-        desserts: [
-          {
-            lu:'11111',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez,',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11112',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11113',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11114',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11115',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-           lu:'11116',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11117',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11118',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-            lu:'11119',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-          {
-           lu:'11110',
-            dni:'11111111',
-            name: 'Juan',
-            apellido:'Perez',
-            email: 'alumnos@unne.com.ar',
-            direccion: 'lavalle 1880',
-          },
-        ],
+        Alumnos:[],
       }
     },
-    
+  
+    created() {
+    db.collection("Alumnos").get().then( (querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        
+        this.Alumnos.push(doc.data());
+    });
+});
+  },
 }
 
 
 </script>
 
-<style>
-</style>

@@ -34,7 +34,7 @@
 
 <script>
 
-import firebase from 'firebase'
+import {fb} from '@/components/FirebaseInit'
   export default {
     data: () => ({
       dialog: false,
@@ -49,7 +49,7 @@ import firebase from 'firebase'
       login() {
       this.error = "";
       if (this.email && this.password) {
-        firebase
+        fb
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(
