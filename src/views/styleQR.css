@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+.qrbox {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-row-gap: 10px;
+    overflow: hidden;
+  }

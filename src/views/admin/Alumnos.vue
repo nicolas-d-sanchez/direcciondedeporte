@@ -61,7 +61,10 @@
     >
       <v-card>
         <v-card-text>
-          <v-img src="@/assets/credencial.jpeg" ></v-img>
+           <!--<div class="qrbox">
+            <img src="" alt="qr-code" />
+          </div>-->
+         <v-img src="@/assets/credencial.jpeg" ></v-img>
         </v-card-text>
 
         <v-card-actions>
@@ -88,12 +91,12 @@
   </v-container>
 
 </template>
-
+<!--<link rel="stylesheet" href="styleQR.css">-->
 
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db} from '@/components/FirebaseInit.js';
-
+//import generateQR from '@/components/scriptQR.js';
 
 export default {
   components: { RegistroAlumnos },
