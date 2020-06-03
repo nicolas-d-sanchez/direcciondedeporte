@@ -32,16 +32,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in Alumnos" :key="item.LU">
-              <td>{{ item.LU }}</td>
-              <td>{{ item.DNI }}</td>
-              <td>{{ item.Nombre }}</td>
-              <td>{{ item.Apellido }}</td>
-              <td>{{ item.Email }}</td>
-              <td>{{ item.Direccion }}</td>
+            <tr v-for="item in Alumnos" :key="item.id">
+             
+              <td>{{ item.data().LU }}</td>
+              <td>{{ item.data().DNI }}</td>
+              <td>{{ item.data().Nombre }}</td>
+              <td>{{ item.data().Apellido }}</td>
+              <td>{{ item.data().Email }}</td>
+              <td>{{ item.data().Direccion }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
-                <v-btn text small text-center  @click.stop="dialog = true">Generar credencial</v-btn> 
+                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn> 
               </td>
               
               
@@ -61,7 +62,9 @@
     >
       <v-card>
         <v-card-text>
-          <v-img src="@/assets/credencial.jpeg" ></v-img>
+          <h1>credencial</h1>
+          <v-img src="@/assets/logo.png"></v-img>
+          <qrcode :value="value"></qrcode>
         </v-card-text>
 
         <v-card-actions>
@@ -94,26 +97,38 @@
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db} from '@/components/FirebaseInit.js';
 
+import qrcode from '@/components/qr-code'
+
 
 export default {
-  components: { RegistroAlumnos },
+  components: { RegistroAlumnos, qrcode },
 
 
 data() {
     return {
         dialog: false,
         Alumnos:[],
+        value:'',
       }
     },
+
+    methods: {
+    
+    credencial(doc){      
+      this.value= doc,
+      this.dialog= true,
+    }
+  },
   
     created() {
-    db.collection("Alumnos").get().then( (querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        
-        this.Alumnos.push(doc.data());
-    });
-});
+    db.collection("Alumnos")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          // doc.data() is never undefined for query doc snapshots
+          this.Alumnos.push(doc);
+        });
+      });
   },
 }
 
