@@ -62,14 +62,9 @@
     >
       <v-card>
         <v-card-text>
-
           <h1>credencial</h1>
           <v-img src="@/assets/logo.png"></v-img>
           <qrcode :value="value"></qrcode>
-
-
-         <v-img src="@/assets/credencial.jpeg" ></v-img>
-
         </v-card-text>
 
         <v-card-actions>
@@ -96,13 +91,10 @@
   </v-container>
 
 </template>
-<!--<link rel="stylesheet" href="styleQR.css">-->
 
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db} from '@/components/FirebaseInit.js';
-
-
 import qrcode from '@/components/qr-code'
 
 
@@ -110,7 +102,7 @@ export default {
   components: { RegistroAlumnos, qrcode },
 
 
-data() {
+    data() {
     return {
         dialog: false,
         Alumnos:[],
