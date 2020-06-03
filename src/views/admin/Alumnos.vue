@@ -115,10 +115,11 @@ data() {
     methods: {
     
     credencial(doc){      
-      this.value= doc,
-      this.dialog= true,
+      this.value= doc;
+      this.dialog= true;
     }
-  },
+    },
+
   
     created() {
     db.collection("Alumnos")
