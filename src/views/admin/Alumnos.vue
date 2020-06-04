@@ -33,7 +33,6 @@
           </thead>
           <tbody>
             <tr v-for="item in Alumnos" :key="item.id">
-             
               <td>{{ item.data().lu }}</td>
               <td>{{ item.data().dni }}</td>
               <td>{{ item.data().Nombre }}</td>
@@ -42,10 +41,8 @@
               <td>{{ item.data().Facultad }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
-                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn> 
+                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn>     
               </td>
-              
-              
             </tr>
           </tbody>
         </template>

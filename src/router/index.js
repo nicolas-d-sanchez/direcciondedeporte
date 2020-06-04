@@ -38,6 +38,11 @@ Vue.use(VueRouter)
             name: 'Usuarios',
             component: () => import('../views/admin/Usuarios.vue')
           },
+          {
+            path: 'Mensajes',
+            name: 'Mensajes',
+            component: () => import('../views/admin/Mensajes.vue')
+          },
 
         ]
       },

@@ -284,47 +284,23 @@
           <v-theme-provider light>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  flat
-                  label="Nombre*"
-                  solo
-                ></v-text-field>
+                <v-text-field flat label="Nombre*" v-model="Mensaje.Nombre" solo></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-text-field
-                  flat
-                  label="Email*"
-                  solo
-                ></v-text-field>
+                <v-text-field flat label="Email*" v-model="Mensaje.Email" solo ></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-text-field
-                  flat
-                  label="Asunto*"
-                  solo
-                ></v-text-field>
+                <v-text-field flat label="Asunto*" v-model="Mensaje.Asunto" solo ></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-textarea
-                  flat
-                  label="Mensaje*"
-                  solo
-                ></v-textarea>
+                <v-textarea flat label="Mensaje*" v-model="Mensaje.Mensaje" solo ></v-textarea>
               </v-col>
 
-              <v-col
-                class="mx-auto"
-                cols="auto"
-              >
-                <v-btn
-                  color="accent"
-                  x-large
-                >
-                  Enviar
-                </v-btn>
+              <v-col class="mx-auto" cols="auto" >
+                <v-btn color="accent" x-large @click="AgregarMensaje" > Enviar </v-btn>
               </v-col>
             </v-row>
           </v-theme-provider>
@@ -360,7 +336,7 @@
 <script>
 
 import Login from "@/components/Login.vue";
-import {fb} from '@/components/FirebaseInit'
+import { fb, db } from "@/components/FirebaseInit.js";
 export default {
   name: 'Home',
   components: { Login },
@@ -369,6 +345,12 @@ export default {
     return{
       logueado: false,
       currentUser: false,
+      Mensaje:{
+        Nombre:"",
+        Email:"",
+        Asunto:"",
+        Mensaje:"",
+        },
       articles: [
           {
             src: 'https://images.unsplash.com/photo-1423784346385-c1d4dac9893a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
@@ -413,6 +395,19 @@ export default {
       this.$emit("toggleModal");
     },
 
+    AgregarMensaje() {
+      db.collection("Mensajes").add(
+        this.Mensaje
+        )
+        .then(function() {
+          window.location.reload();window.location.reload();
+          
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
+    },
+
      CerrarSesion() {
       fb
         .auth()
@@ -428,11 +423,7 @@ export default {
     }
   },
   created() {
-    
-   
           this.logueado = fb.auth().currentUser
-    
-
   },
  
 

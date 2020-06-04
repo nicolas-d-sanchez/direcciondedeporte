@@ -76,11 +76,8 @@ export default {
       items: [
         { text: "Principal", icon: "mdi-home-circle", link: "/" },
         { text: "Panel Alumnos", icon: "mdi-account", link: "/Panel/Alumnos" },
-        {
-          text: "Panel Usuarios",
-          icon: "mdi-account-edit",
-          link: "/Panel/Usuarios"
-        }
+        { text: "Panel Usuarios",icon: "mdi-account-edit", link: "/Panel/Usuarios" },
+        { text: "Panel Mensajes", icon: "mdi-message", link: "/Panel/Mensajes" },
       ]
     };
   },
