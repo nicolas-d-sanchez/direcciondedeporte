@@ -26,7 +26,7 @@
               <th class="text-left">Nombre</th>
               <th class="text-left">Apellido</th>
               <th class="text-left">Email</th>
-              <th class="text-left">Direccion</th>
+              <th class="text-left">Facultad</th>
               <th class="text-left">Acciones</th>
               
             </tr>
@@ -34,12 +34,12 @@
           <tbody>
             <tr v-for="item in Alumnos" :key="item.id">
              
-              <td>{{ item.data().LU }}</td>
-              <td>{{ item.data().DNI }}</td>
+              <td>{{ item.data().lu }}</td>
+              <td>{{ item.data().dni }}</td>
               <td>{{ item.data().Nombre }}</td>
               <td>{{ item.data().Apellido }}</td>
               <td>{{ item.data().Email }}</td>
-              <td>{{ item.data().Direccion }}</td>
+              <td>{{ item.data().Facultad }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
                 <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn> 

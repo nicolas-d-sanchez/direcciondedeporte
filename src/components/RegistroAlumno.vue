@@ -30,6 +30,17 @@
               <v-col cols="12">
                 <v-text-field label="Direccion" v-model="DatosAlumnos.Direccion"  ></v-text-field>
               </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  v-model="DatosAlumnos.Facultad"
+                  :items="['Arquitectura y Urbanismo', 'Ciencias Económicas','Ciencias Veterinarias',
+                            'Derecho Ciencias Sociales y Políticas', 'Medicina', 'Ciencias Criminalísticas y Criminología',
+                            'Artes, Diseño y Ciencias de la Cultura','Ciencias Agrarias','Ciencias Exactas y Naturales y Agrimensura',
+                            'Humanidades', 'Ingeniería', 'Odontología']"
+                  label="Facultad*"
+                  
+                ></v-select>
+              </v-col>
             </v-row>
           </v-container>
           <small>*Todos los item son requeridos</small>
@@ -58,12 +69,9 @@ import { fb, db} from '@/components/FirebaseInit'
         Nombre:"",
         Apellido:"",
         Email:"",
-        Direccion:""
+        Direccion:"",
+        Facultad:"",
         },
-       
-        
-        
-        
         dialog: false
     }
     },
