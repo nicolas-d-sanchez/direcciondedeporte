@@ -26,23 +26,26 @@
               <th class="text-left">Nombre</th>
               <th class="text-left">Apellido</th>
               <th class="text-left">Email</th>
-              <th class="text-left">Facultad</th>
+              <th class="text-left">Direccion</th>
               <th class="text-left">Acciones</th>
               
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in Alumnos" :key="item.id">
-              <td>{{ item.data().lu }}</td>
-              <td>{{ item.data().dni }}</td>
+             
+              <td>{{ item.data().LU }}</td>
+              <td>{{ item.data().DNI }}</td>
               <td>{{ item.data().Nombre }}</td>
               <td>{{ item.data().Apellido }}</td>
               <td>{{ item.data().Email }}</td>
-              <td>{{ item.data().Facultad }}</td>
+              <td>{{ item.data().Direccion }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
-                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn>     
+                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn> 
               </td>
+              
+              
             </tr>
           </tbody>
         </template>
@@ -55,13 +58,17 @@
 
     <v-dialog
       v-model="dialog"
-      max-width="290"
+      max-width="330"
+      max-hight="450"
     >
       <v-card>
         <v-card-text>
-          <h1>credencial</h1>
-          <v-img src="@/assets/logo.png"></v-img>
+          <h1 style="text-align:center">Credencial de Alumno</h1>
+          <div class="credencialgen">
+          <!--<v-img src="@/assets/logo.png"></v-img>-->
+         
           <qrcode :value="value"></qrcode>
+          </div>
         </v-card-text>
 
         <v-card-actions>
@@ -88,7 +95,21 @@
   </v-container>
 
 </template>
-
+<style scoped>
+h1 {
+  margin-top: 25px;
+}
+.credencialgen {
+  background-image: '@/assets/logo.png';
+  color: rgb(143, 202, 183);
+  width: 300px;
+  height: 400px;
+  text-align: center;
+}
+qrcode {
+  margin-bottom: auto;
+}
+</style>
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db} from '@/components/FirebaseInit.js';
@@ -130,4 +151,5 @@ export default {
 
 
 </script>
+
 
