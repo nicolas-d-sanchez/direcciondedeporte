@@ -34,15 +34,15 @@
           <tbody>
             <tr v-for="item in Alumnos" :key="item.id">
              
-              <td>{{ item.data().LU }}</td>
-              <td>{{ item.data().DNI }}</td>
+              <td>{{ item.data().lu }}</td>
+              <td>{{ item.data().dni }}</td>
               <td>{{ item.data().Nombre }}</td>
               <td>{{ item.data().Apellido }}</td>
               <td>{{ item.data().Email }}</td>
               <td>{{ item.data().Direccion }}</td>
               <td>
                 <v-btn text small text-center>Editar</v-btn> 
-                <v-btn text small text-center  @click="credencial(item.id)">Generar credencial</v-btn> 
+                <v-btn text small text-center  @click="credencial(item)">Generar credencial</v-btn> 
               </td>
               
               
@@ -112,11 +112,11 @@ export default {
         Alumnos:[],
         
         Datos:{
-        value:'',
-        lu:"",
-        Nombre:"",
-        Apellido:"",
-        Facultad:"",
+        id:'',
+        LU:'',
+        Nombre:'',
+        Apellido:'',
+        Facultad:'',
         },
         
       }
@@ -125,13 +125,12 @@ export default {
     methods: {
     
     credencial(doc){      
-      this.Datos.value= doc;
-      console.log(doc)
-      this.Datos.lu= doc.lu;
-      this.Datos.Nombre = doc.Nombre;
-      this.Datos.Apellido= doc.Apellido;
-      this.Datos.Facultad = doc.Facultad;
-      this.Datos.dialog= true;
+      this.Datos.id= doc.id;
+      this.Datos.lu= doc.data().lu;
+      this.Datos.Nombre = doc.data().Nombre;
+      this.Datos.Apellido= doc.data().Apellido;
+      this.Datos.Facultad = doc.data().Facultad;
+      this.dialog= true;
     }
     },
 

@@ -2,7 +2,12 @@
   
   <div id="credencialgen">
     <h1>Credencial Alumno</h1>
-    <qrcode-vue :value="datos.value" :size="size" level="H"></qrcode-vue>
+    <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
+    <tr>LU: {{datos.lu}}</tr>
+    <tr>Nombre: {{datos.Nombre}}</tr>
+    <tr>Apellido: {{datos.Apellido}}</tr>
+    <tr>Facultad: {{datos.Facultad}}</tr>
+    
   </div>
 </template>
 
