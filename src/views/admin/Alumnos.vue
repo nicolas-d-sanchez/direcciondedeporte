@@ -58,18 +58,18 @@
 
     <v-dialog
       v-model="dialog"
-      max-width="330"
-      max-hight="450"
-    >
+      max-width="380"
+      max-hight="500">
       <v-card>
         <v-card-text>
-          <h1 style="text-align:center">Credencial de Alumno</h1>
-          <div class="credencialgen">
+          
+          </v-card-text>
+          
           <!--<v-img src="@/assets/logo.png"></v-img>-->
-         
-          <qrcode :value="value"></qrcode>
-          </div>
-        </v-card-text>
+          <qrcode :datos="Datos"></qrcode>
+          
+          
+        
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -95,21 +95,7 @@
   </v-container>
 
 </template>
-<style scoped>
-h1 {
-  margin-top: 25px;
-}
-.credencialgen {
-  background-image: '@/assets/logo.png';
-  color: rgb(143, 202, 183);
-  width: 300px;
-  height: 400px;
-  text-align: center;
-}
-qrcode {
-  margin-bottom: auto;
-}
-</style>
+
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db} from '@/components/FirebaseInit.js';
@@ -124,15 +110,28 @@ export default {
     return {
         dialog: false,
         Alumnos:[],
+        
+        Datos:{
         value:'',
+        lu:"",
+        Nombre:"",
+        Apellido:"",
+        Facultad:"",
+        },
+        
       }
     },
 
     methods: {
     
     credencial(doc){      
-      this.value= doc;
-      this.dialog= true;
+      this.Datos.value= doc;
+      console.log(doc)
+      this.Datos.lu= doc.lu;
+      this.Datos.Nombre = doc.Nombre;
+      this.Datos.Apellido= doc.Apellido;
+      this.Datos.Facultad = doc.Facultad;
+      this.Datos.dialog= true;
     }
     },
 
