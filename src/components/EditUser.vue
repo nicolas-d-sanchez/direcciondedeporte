@@ -12,12 +12,12 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field v-model="User.Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field v-model="User.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
-                  v-model="User.Apellido"
+                  v-model="User.data().Apellido"
                   :rules="[rules.required]"
                   label="Apellido*"
                   persistent-hint
@@ -27,7 +27,7 @@
               
               <v-col cols="12">
                 <v-text-field
-                  v-model="User.Email"
+                  v-model="User.data().Email"
                   label="Email*"
                   :rules="[rules.required,rules.email]"
                 ></v-text-field>
@@ -47,14 +47,14 @@
               </v-col> -->
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="User.dni"
+                  v-model="User.data().dni"
                   label="DNI*"
                   :rules="[rules.required]"                  
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  v-model="User.TipoUser"
+                  v-model="User.data().TipoUser"
                   :items="['Administrador', 'Profesor']"
                   label="Tipo Usuario*"
                   :rules="[rules.required]"
@@ -69,7 +69,7 @@
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
       
-          <v-btn color="blue darken-1" text @click="AgregarUser">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="EditUser">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -99,9 +99,10 @@ export default {
   },
 
   methods: {
-    AgregarUser() {
-      db.collection("Usuarios").add(
-        this.User
+    EditUser() {
+      console.log(this.User.id)
+      db.collection("Usuarios").update(
+        this.User.id
         )
         .then(function() {
           

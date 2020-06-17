@@ -37,7 +37,7 @@
             <td>{{ item.data().TipoUser }}</td>
             <td>
               
-              <EditUser :User="item.data()"></EditUser>
+              <EditUser :User="item"></EditUser>
               <v-btn text small text-center>Alta</v-btn>
               <v-btn text small text-center @click="deleteUser(item.id)">Baja</v-btn></td>
               
