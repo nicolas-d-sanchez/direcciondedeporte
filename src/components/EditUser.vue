@@ -16,21 +16,11 @@
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  v-model="User.data().Apellido"
-                  :rules="[rules.required]"
-                  label="Apellido*"
-                  persistent-hint
-                  required
-                ></v-text-field>
+                <v-text-field id="Apellido" v-model="User.data().Apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
               </v-col>
               
               <v-col cols="12">
-                <v-text-field
-                  v-model="User.data().Email"
-                  label="Email*"
-                  :rules="[rules.required,rules.email]"
-                ></v-text-field>
+                <v-text-field id="Email" v-model="User.data().Email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
               </v-col>
               <!-- <v-col cols="12">
                 <v-text-field
@@ -46,20 +36,11 @@
                 ></v-text-field>
               </v-col> -->
               <v-col cols="12" sm="6">
-                <v-text-field
-
-                  v-model="User.data().dni"
-                  label="DNI*"
-                  :rules="[rules.required]"                  
-                ></v-text-field>
+                <v-text-field id="Dni" v-model="User.data().dni" label="DNI*" :rules="[rules.required]" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-select
-                  
-                  v-model="User.data().TipoUser"
-                  :items="['Administrador', 'Profesor']"
-                  label="Tipo Usuario*"
-                  :rules="[rules.required]"
+                <v-select id="TipoUser"
+                v-model="User.data().TipoUser" :items="['Administrador', 'Profesor']" label="Tipo Usuario*" x:rules="[rules.required]"
                 ></v-select>
               </v-col>
 
@@ -69,8 +50,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
-      
+          <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>      
           <v-btn color="blue darken-1" text @click="EditUser(User.id)">Guardar</v-btn>
         </v-card-actions>
       </v-card>
@@ -103,22 +83,31 @@ export default {
   methods: {
     EditUser() {
       var NombreN = document.getElementById('Nombre').value;
+      var ApellidoN = document.getElementById('Apellido').value;
+      var EmailN = document.getElementById('Email').value;
+      var DniN = document.getElementById('Dni').value;
       console.log (NombreN)
       
-      var washingtonRef = db.collection("Usuarios").doc(this.User.id);
+      var UsuariosRef = db.collection("Usuarios").doc(this.User.id);
 
-      // Set the "capital" field of the city 'DC'
-      return washingtonRef.update({
-          Nombre: NombreN
+      
+      return UsuariosRef.update({
+          Nombre: NombreN,
+          Apellido: ApellidoN,
+          Email: EmailN,
+          dni: DniN,
       })
       .then(function() {
-          console.log("Document successfully updated!");
+        this.dialog=false;
+        window.location.reload();
+           
       })
       .catch(function(error) {
           // The document probably doesn't exist.
           console.error("Error updating document: ", error);
       });
 
+      
      }
         
     

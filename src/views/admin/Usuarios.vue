@@ -35,13 +35,11 @@
             <td>{{ item.data().Apellido }}</td>
             <td>{{ item.data().Email }}</td>
             <td>{{ item.data().TipoUser }}</td>
-            <td>
-              
+            <td>              
               <EditUser :User="item"></EditUser>
               <v-btn text small text-center>Alta</v-btn>
-              <v-btn text small text-center @click="deleteUser(item.id)">Baja</v-btn></td>
-              
-              
+              <v-btn text small text-center @click="deleteUser(item.id)">Baja</v-btn>
+            </td>             
           </tr>
         </tbody>
       </template>
