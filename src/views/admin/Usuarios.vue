@@ -77,8 +77,10 @@ export default {
               console.error("Error removing document: ", error);
           });
       }else {}
-    }
+    },
+
   },
+  
 
 
   created() {

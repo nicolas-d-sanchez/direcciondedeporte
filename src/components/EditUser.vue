@@ -12,7 +12,7 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field v-model="User.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field id="Nombre" v-model="User.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
@@ -47,6 +47,7 @@
               </v-col> -->
               <v-col cols="12" sm="6">
                 <v-text-field
+
                   v-model="User.data().dni"
                   label="DNI*"
                   :rules="[rules.required]"                  
@@ -54,6 +55,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
+                  
                   v-model="User.data().TipoUser"
                   :items="['Administrador', 'Profesor']"
                   label="Tipo Usuario*"
@@ -69,7 +71,7 @@
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
       
-          <v-btn color="blue darken-1" text @click="EditUser">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="EditUser(User.id)">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -100,19 +102,26 @@ export default {
 
   methods: {
     EditUser() {
-      console.log(this.User.id)
-      db.collection("Usuarios").update(
-        this.User.id
-        )
-        .then(function() {
-          
-          window.location.reload();
-        })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
-        });
-        this.dialog=false;
-    }
+      var NombreN = document.getElementById('Nombre').value;
+      console.log (NombreN)
+      
+      var washingtonRef = db.collection("Usuarios").doc(this.User.id);
+
+      // Set the "capital" field of the city 'DC'
+      return washingtonRef.update({
+          Nombre: NombreN
+      })
+      .then(function() {
+          console.log("Document successfully updated!");
+      })
+      .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+      });
+
+     }
+        
+    
   }
 };
 </script>
