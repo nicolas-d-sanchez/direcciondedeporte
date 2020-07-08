@@ -1,14 +1,25 @@
 <template>
   
-  <div id="credencialgen">
+  <v-container id="credencialgen">
     <h1>Credencial Alumno</h1>
-    <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
-    <tr>LU: {{datos.lu}}</tr>
-    <tr>Nombre: {{datos.Nombre}}</tr>
-    <tr>Apellido: {{datos.Apellido}}</tr>
-    <tr>Facultad: {{datos.Facultad}}</tr>
+    <v-row>
+      <v-col md="6">
+        <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
+      </v-col>
+      <v-col  md="6">
+        <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
+      </v-col>
+      <ul id="datos">
+        <ul>LU: {{datos.lu}}</ul>
+        <ul>Nombre: {{datos.Nombre}}</ul>
+        <ul>Apellido: {{datos.Apellido}}</ul>
+        <ul>Facultad: {{datos.Facultad}}</ul> 
+      </ul>
+ 
+    </v-row>
+  
     
-  </div>
+  </V-container>
 </template>
 
 
@@ -29,16 +40,17 @@
 </script> 
 
 <style scoped>
+
 h1 {
   margin-top: 25px;
 }
 #credencialgen {
-  background-image: "@/assets/logo.png";
-  background-color: rgb(143, 202, 183);
-  width: 350px;
+  /* background-color: rgb(143, 202, 183); */
+  width: 650px;
   height: 460px;
   text-align: center;
-  border-color: #333131;
+  border:solid 2px #000000;
+ 
   border-radius: 15px;
   border-width: 5px;
   margin-left: 15px;
@@ -47,6 +59,9 @@ h1 {
 #qrcode {
   margin-bottom: auto;
   text-align: match-parent;
+}
+#datos{
+  text-align: left
 }
 #credencialgen #qrcode {
   text-align: center;

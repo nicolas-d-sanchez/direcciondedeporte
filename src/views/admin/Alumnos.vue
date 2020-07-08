@@ -13,129 +13,92 @@
       <v-flex md6>
         <v-img src="@/assets/Teamwork.jpg" max-height="300" max-width="300"></v-img>
       </v-flex>
-       <RegistroAlumnos/>
-     <v-flex xs12>
-      
-      <v-simple-table 
-      height="400px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">LU</th>
-              <th class="text-left">DNI</th>
-              <th class="text-left">Nombre</th>
-              <th class="text-left">Apellido</th>
-              <th class="text-left">Email</th>
-              <th class="text-left">Direccion</th>
-              <th class="text-left">Acciones</th>
-              
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in Alumnos" :key="item.id">
-             
-              <td>{{ item.data().lu }}</td>
-              <td>{{ item.data().dni }}</td>
-              <td>{{ item.data().Nombre }}</td>
-              <td>{{ item.data().Apellido }}</td>
-              <td>{{ item.data().Email }}</td>
-              <td>{{ item.data().Direccion }}</td>
-              <td>
-                <v-btn text small text-center>Editar</v-btn> 
-                <v-btn text small text-center  @click="credencial(item)">Generar credencial</v-btn> 
-              </td>
-              
-              
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
+      <RegistroAlumnos />
+      <v-flex xs12>
+        <v-simple-table height="400px">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">LU</th>
+                <th class="text-left">DNI</th>
+                <th class="text-left">Nombre</th>
+                <th class="text-left">Apellido</th>
+                <th class="text-left">Email</th>
+                <th class="text-left">Direccion</th>
+                <th class="text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in Alumnos" :key="item.id">
+                <td>{{ item.data().lu }}</td>
+                <td>{{ item.data().dni }}</td>
+                <td>{{ item.data().Nombre }}</td>
+                <td>{{ item.data().Apellido }}</td>
+                <td>{{ item.data().Email }}</td>
+                <td>{{ item.data().Direccion }}</td>
+                <td>
+                  <v-btn text small text-center>Editar</v-btn>
+                  <v-btn text small text-center @click="credencial(item)">Generar credencial</v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-flex>
-
-      
     </v-layout>
     <v-row justify="center">
+      <v-dialog v-model="dialog" max-width="680" max-hight="400">
+        <v-card>
+          <v-card-text></v-card-text>
 
-    <v-dialog
-      v-model="dialog"
-      max-width="380"
-      max-hight="500">
-      <v-card>
-        <v-card-text>
-          
-          </v-card-text>
-          
-          <!--<v-img src="@/assets/logo.png"></v-img>-->
           <qrcode :datos="Datos"></qrcode>
-          
-          
-        
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Enviar por Email
-          </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Aceptar
-          </v-btn>
-          
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false">Enviar por Email</v-btn>
+            <v-btn color="green darken-1" text @click="dialog = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
-
 </template>
 
 <script>
 import RegistroAlumnos from "@/components/RegistroAlumno";
-import { fb, db} from '@/components/FirebaseInit.js';
-import qrcode from '@/components/qr-code'
-
+import { fb, db } from "@/components/FirebaseInit.js";
+import qrcode from "@/components/qr-code";
 
 export default {
   components: { RegistroAlumnos, qrcode },
 
-
-    data() {
+  data() {
     return {
-        dialog: false,
-        Alumnos:[],
-        
-        Datos:{
-        id:'',
-        LU:'',
-        Nombre:'',
-        Apellido:'',
-        Facultad:'',
-        },
-        
+      dialog: false,
+      Alumnos: [],
+
+      Datos: {
+        id: "",
+        LU: "",
+        Nombre: "",
+        Apellido: "",
+        Facultad: ""
       }
-    },
+    };
+  },
 
-    methods: {
-    
-    credencial(doc){      
-      this.Datos.id= doc.id;
-      this.Datos.lu= doc.data().lu;
+  methods: {
+    credencial(doc) {
+      this.Datos.id = doc.id;
+      this.Datos.lu = doc.data().lu;
       this.Datos.Nombre = doc.data().Nombre;
-      this.Datos.Apellido= doc.data().Apellido;
+      this.Datos.Apellido = doc.data().Apellido;
       this.Datos.Facultad = doc.data().Facultad;
-      this.dialog= true;
+      this.dialog = true;
     }
-    },
+  },
 
-  
-    created() {
+  created() {
     db.collection("Alumnos")
       .get()
       .then(querySnapshot => {
@@ -144,10 +107,8 @@ export default {
           this.Alumnos.push(doc);
         });
       });
-  },
-}
-
-
+  }
+};
 </script>
 
 
