@@ -37,7 +37,7 @@
                 <td>{{ item.data().Email }}</td>
                 <td>{{ item.data().Direccion }}</td>
                 <td>
-                  <v-btn text small text-center>Editar</v-btn>
+                  <EditAlumno :Alumnos="item"></EditAlumno>
                   <v-btn text small text-center @click="credencial(item)">Generar credencial</v-btn>
                 </td>
               </tr>
@@ -68,9 +68,9 @@
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
-
+import EditAlumno from "@/components/EditAlumno.vue";
 export default {
-  components: { RegistroAlumnos, qrcode },
+  components: { RegistroAlumnos, qrcode, EditAlumno },
 
   data() {
     return {

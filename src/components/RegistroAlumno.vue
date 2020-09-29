@@ -32,6 +32,14 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
+                  v-model="DatosAlumnos.Sexo"
+                  :items="['Masculino', 'Femenino']"
+                  label="Sexo*"
+                  
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
                   v-model="DatosAlumnos.Facultad"
                   :items="['Arquitectura y Urbanismo', 'Ciencias Económicas','Ciencias Veterinarias',
                             'Derecho Ciencias Sociales y Políticas', 'Medicina', 'Ciencias Criminalísticas y Criminología',
@@ -70,7 +78,9 @@ import { fb, db} from '@/components/FirebaseInit'
         Apellido:"",
         Email:"",
         Direccion:"",
+        Sexo:"",
         Facultad:"",
+        Estado:"En Proceso",
         },
         dialog: false
     }

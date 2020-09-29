@@ -4,9 +4,9 @@
       <v-flex xs12 md6>
         <h1>Gestion De Usuarios</h1>
         <h5>
-         amet consectetur adipisicing elit. Quos optio, ducimus,
+          amet consectetur adipisicing elit. Quos optio, ducimus,
           perspiciatis corrupti ipsa dolor labore ad deleniti rerum omnis, ullam cum laboriosam nulla
-          ipsum sunt vero enim b      eatae ipsam!    
+          ipsum sunt vero enim b eatae ipsam!
         </h5>
       </v-flex>
       <v-flex>
@@ -24,7 +24,7 @@
             <th class="text-left">Nombre</th>
             <th class="text-left">Apellido</th>
             <th class="text-left">Email</th>
-            <th class="text-left">Direccion</th>
+            <th class="text-left">Tipo Usuario</th>
             <th class="text-left">Acciones</th>
           </tr>
         </thead>
@@ -35,11 +35,23 @@
             <td>{{ item.data().Apellido }}</td>
             <td>{{ item.data().Email }}</td>
             <td>{{ item.data().TipoUser }}</td>
-            <td>              
+            <td>
               <EditUser :User="item"></EditUser>
-              <v-btn text small text-center>Alta</v-btn>
-              <v-btn text small text-center @click="deleteUser(item.id)">Baja</v-btn>
-            </td>             
+              <v-btn
+                text
+                small
+                text-center
+                v-if="item.data().Estado === ''"
+                @click="AltaUser(item.id)"
+              >Alta</v-btn>
+              <v-btn
+                text
+                small
+                text-center
+                v-if="item.data().Estado === 'true'"
+                @click="deleteUser(item.id)"
+              >Baja</v-btn>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -56,7 +68,7 @@ import { fb, db } from "@/components/FirebaseInit.js";
 
 export default {
   name: "Usuarios",
-  components: { RegistroUser,EditUser },
+  components: { RegistroUser, EditUser },
 
   data() {
     return {
@@ -65,21 +77,35 @@ export default {
   },
 
   methods: {
-    
-    deleteUser(doc){
-      if (confirm('Estas seguro???')){
-        db.collection("Usuarios").doc(doc).delete().then(function() {
-              console.log("Document successfully deleted!");
-              window.location.reload();
-          }).catch(function(error) {
-              console.error("Error removing document: ", error);
-          });
-      }else {}
+    deleteUser(doc) {
+      var UsuariosRef = db.collection("Usuarios").doc(doc);
+      return UsuariosRef.update({
+        Estado: ""
+      })
+        .then(function() {
+          window.location.reload();
+        })
+        .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error Al Modifica Usuario: ", error);
+        });
     },
 
+    AltaUser(doc) {
+      var UsuariosRef = db.collection("Usuarios").doc(doc);
+      return UsuariosRef.update({
+        Estado: "true"
+      })
+        .then(function() {
+          window.location.reload();
+        })
+        .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error Al Modifica Usuario: ", error);
+        });
+    },
+    
   },
-  
-
 
   created() {
     db.collection("Usuarios")

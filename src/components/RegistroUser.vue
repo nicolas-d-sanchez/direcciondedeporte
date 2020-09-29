@@ -66,7 +66,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Cerrar</v-btn>
+          <v-btn color="blue darken-1" text @click="Limpiar">Cerrar</v-btn>
           <v-btn color="blue darken-1" text @click="AgregarUser">Guardar</v-btn>
         </v-card-actions>
       </v-card>
@@ -91,7 +91,8 @@ export default {
         Apellido: "",
         Email: "",
         password: "",
-        TipoUser: ""
+        TipoUser: "",
+        Estado:"",
       },
 
       rules: {
@@ -118,7 +119,11 @@ export default {
         .catch(function(error) {
           console.error("Error writing document: ", error);
         });
-        this.dialog=false;
+      
+        this.dialog = false;
+    },
+    Limpiar() {
+        this.dialog = false;
     }
   }
 };
