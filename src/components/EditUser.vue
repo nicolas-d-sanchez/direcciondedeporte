@@ -100,7 +100,7 @@ export default {
       })
       .then(function() {
         
-        window.location.reload();
+        // window.location.reload();
         
            
       })

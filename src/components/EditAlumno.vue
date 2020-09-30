@@ -108,12 +108,8 @@ export default {
           Email: EmailN,
           dni: DniN,
       })
-      .then(function() {
+      .then( () => this.$mount())
         
-        window.location.reload();
-        
-           
-      })
       .catch(function(error) {
           // The document probably doesn't exist.
           console.error("Error Al Modifica Alumnos: ", error);

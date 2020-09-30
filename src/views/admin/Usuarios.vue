@@ -78,7 +78,9 @@ export default {
 
   methods: {
     deleteUser(doc) {
+
       var UsuariosRef = db.collection("Usuarios").doc(doc);
+
       return UsuariosRef.update({
         Estado: ""
       })
@@ -92,7 +94,9 @@ export default {
     },
 
     AltaUser(doc) {
+
       var UsuariosRef = db.collection("Usuarios").doc(doc);
+
       return UsuariosRef.update({
         Estado: "true"
       })
@@ -107,11 +111,11 @@ export default {
     
   },
 
-  created() {
+  mounted() {
     db.collection("Usuarios")
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
+      .then(onSnapshot => {
+        onSnapshot.forEach(doc => {
           // doc.data() is never undefined for query doc snapshots
           this.Usuario.push(doc);
         });

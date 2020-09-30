@@ -80,7 +80,7 @@ import { fb, db} from '@/components/FirebaseInit'
         Direccion:"",
         Sexo:"",
         Facultad:"",
-        Estado:"En Proceso",
+        Estado:"",
         },
         dialog: false
     }

@@ -98,7 +98,7 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     db.collection("Alumnos")
       .get()
       .then(querySnapshot => {
