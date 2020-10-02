@@ -19,6 +19,7 @@
           <template v-slot:default>
             <thead>
               <tr>
+                <th class="text-left">Foto</th>
                 <th class="text-left">LU</th>
                 <th class="text-left">DNI</th>
                 <th class="text-left">Nombre</th>
@@ -30,6 +31,7 @@
             </thead>
             <tbody>
               <tr v-for="item in Alumnos" :key="item.id">
+                <img class="preview" v-bind:src="item.data().Foto" >  
                 <td>{{ item.data().lu }}</td>
                 <td>{{ item.data().dni }}</td>
                 <td>{{ item.data().Nombre }}</td>
@@ -112,3 +114,9 @@ export default {
 </script>
 
 
+<style scoped="">
+img.preview {
+    width: 80px;
+}
+
+</style>

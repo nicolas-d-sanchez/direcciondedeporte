@@ -4,9 +4,10 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import {fb} from '@/components/FirebaseInit'
-import '@/components/FirebaseInit'
+
 
 Vue.config.productionTip = false
+
 
 let app;
 fb.auth().onAuthStateChanged(user =>{

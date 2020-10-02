@@ -65,7 +65,7 @@ import { fb, db} from '@/components/FirebaseInit'
 
 export default {
   props:['User'],
-  name: "RegistoUser",
+  name: "EditUser",
   data() {
     return {
       dialog: false,
