@@ -161,7 +161,7 @@ export default {
 
     onUpload(){
       this.picture=null;
-      const storageRef=fb.storage().ref(`${this.imageData.name}`).put(this.imageData);
+      const storageRef=fb.storage().ref('Fotos/'+`${this.imageData.name}`).put(this.imageData);
       storageRef.on(`state_changed`,snapshot=>{
         this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
       }, error=>{console.log(error.message)},

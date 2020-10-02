@@ -4,12 +4,14 @@
     <h1>Credencial Alumno</h1>
     <v-row>
       <v-col md="6">
-        <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
+        
+        <img class="preview"  v-bind:src="datos.Foto" >
       </v-col>
       <v-col  md="6">
         <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
       </v-col>
       <ul id="datos">
+     
         <ul>LU: {{datos.lu}}</ul>
         <ul>Nombre: {{datos.Nombre}}</ul>
         <ul>Apellido: {{datos.Apellido}}</ul>
@@ -39,7 +41,14 @@
   }
 </script> 
 
+
+
 <style scoped>
+
+img.preview {
+    width: 200px; height: 200px;
+    
+}
 
 h1 {
   margin-top: 25px;

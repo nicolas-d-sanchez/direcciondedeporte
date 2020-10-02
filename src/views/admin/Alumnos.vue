@@ -81,6 +81,7 @@ export default {
 
       Datos: {
         id: "",
+        Foto:"",
         LU: "",
         Nombre: "",
         Apellido: "",
@@ -92,6 +93,7 @@ export default {
   methods: {
     credencial(doc) {
       this.Datos.id = doc.id;
+      this.Datos.Foto = doc.data().Foto;
       this.Datos.lu = doc.data().lu;
       this.Datos.Nombre = doc.data().Nombre;
       this.Datos.Apellido = doc.data().Apellido;
@@ -116,7 +118,7 @@ export default {
 
 <style scoped="">
 img.preview {
-    width: 80px;
+    width: 50px; height: 50px;
 }
 
 </style>
