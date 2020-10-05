@@ -14,7 +14,27 @@
       </v-flex>
     </v-layout>
 
-    <RegistroUser />
+
+
+
+  <v-row>
+    <v-col  sm="2" xl="12">
+                <v-select  
+                  v-model="filtros" 
+                  :items="['DNI', 'Nombre', 'Apellido']"                  
+                  label="Tipo de Dato*"              
+                ></v-select>
+      </v-col>            
+      <v-col  sm="3" xl="12">    
+                <v-text-field type="search" placefolder="Buscar" v-model="buscar" label="Buscar" > </v-text-field>
+      </v-col>
+      <RegistroUser />
+  </v-row>
+  
+      
+
+    
+   
 
     <v-simple-table dark height="400px">
       <template v-slot:default>
@@ -29,7 +49,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in Usuario" :key="item.id">
+          <tr v-for="item in Filtro" :key="item.id">
             <td>{{ item.data().dni }}</td>
             <td>{{ item.data().Nombre }}</td>
             <td>{{ item.data().Apellido }}</td>
@@ -72,6 +92,9 @@ export default {
 
   data() {
     return {
+
+      buscar: "",
+      filtros:"",
       Usuario: []
     };
   },
@@ -80,7 +103,6 @@ export default {
     deleteUser(doc) {
 
       var UsuariosRef = db.collection("Usuarios").doc(doc);
-
       return UsuariosRef.update({
         Estado: ""
       })
@@ -88,15 +110,12 @@ export default {
           window.location.reload();
         })
         .catch(function(error) {
-          // The document probably doesn't exist.
           console.error("Error Al Modifica Usuario: ", error);
         });
     },
 
     AltaUser(doc) {
-
       var UsuariosRef = db.collection("Usuarios").doc(doc);
-
       return UsuariosRef.update({
         Estado: "true"
       })
@@ -104,11 +123,31 @@ export default {
           window.location.reload();
         })
         .catch(function(error) {
-          // The document probably doesn't exist.
           console.error("Error Al Modifica Usuario: ", error);
         });
     },
     
+  },
+
+  computed:{
+    Filtro(){
+
+      if ( this.filtros === "DNI"){
+       
+         return this.Usuario.filter((usuario)=>usuario.data().dni.includes(this.buscar));
+     
+   }else if ( this.filtros === "Nombre"){
+    console.log(this.buscar)
+       return this.Usuario.filter((usuario)=>usuario.data().Nombre.includes(this.buscar));
+        }
+    else if ( this.filtros === "Apellido"){
+ 
+       return this.Usuario.filter((usuario)=>usuario.data().Apellido.includes(this.buscar));
+        }
+     else {
+           return this.Usuario
+     }
+    }
   },
 
   mounted() {
@@ -120,10 +159,7 @@ export default {
           this.Usuario.push(doc);
         });
       });
-  }
-};
+  },
+
+}
 </script>
-
-
-
-

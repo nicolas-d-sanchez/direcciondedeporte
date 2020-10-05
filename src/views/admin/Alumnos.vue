@@ -4,16 +4,40 @@
       <v-flex md6>
         <h1>Gestion De Alumnos</h1>
         <h5>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos optio, ducimus,
-          perspiciatis corrupti ipsa dolor labore ad deleniti rerum omnis, ullam cum laboriosam nulla
-          ipsum sunt vero enim beatae ipsam!
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos optio,
+          ducimus, perspiciatis corrupti ipsa dolor labore ad deleniti rerum
+          omnis, ullam cum laboriosam nulla ipsum sunt vero enim beatae ipsam!
         </h5>
       </v-flex>
 
-      <v-flex md6>
-        <v-img src="@/assets/Teamwork.jpg" max-height="300" max-width="300"></v-img>
+      <v-flex>
+        <v-img
+          src="@/assets/Teamwork.jpg"
+          max-height="300"
+          max-width="300"
+        ></v-img>
       </v-flex>
-      <RegistroAlumnos />
+
+      <v-row>
+        <v-col sm="2" xl="12">
+          <v-select
+            v-model="filtros"
+            :items="['DNI', 'Nombre', 'Apellido']"
+            label="Tipo de Dato*"
+          ></v-select>
+        </v-col>
+        <v-col sm="3" xl="12">
+          <v-text-field
+            type="search"
+            placefolder="Buscar"
+            v-model="buscar"
+            label="Buscar"
+          >
+          </v-text-field>
+        </v-col>
+        <RegistroAlumnos />
+      </v-row>
+
       <v-flex xs12>
         <v-simple-table height="400px">
           <template v-slot:default>
@@ -30,8 +54,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in Alumnos" :key="item.id">
-                <img class="preview" v-bind:src="item.data().Foto" >  
+              <tr v-for="item in Filtro" :key="item.id">
+                <img class="preview" v-bind:src="item.data().Foto" />
                 <td>{{ item.data().lu }}</td>
                 <td>{{ item.data().dni }}</td>
                 <td>{{ item.data().Nombre }}</td>
@@ -40,7 +64,9 @@
                 <td>{{ item.data().Direccion }}</td>
                 <td>
                   <EditAlumno :Alumnos="item"></EditAlumno>
-                  <v-btn text small text-center @click="credencial(item)">Generar credencial</v-btn>
+                  <v-btn text small text-center @click="credencial(item)"
+                    >Generar credencial</v-btn
+                  >
                 </td>
               </tr>
             </tbody>
@@ -57,8 +83,12 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false">Enviar por Email</v-btn>
-            <v-btn color="green darken-1" text @click="dialog = false">Aceptar</v-btn>
+            <v-btn color="green darken-1" text @click="dialog = false"
+              >Enviar por Email</v-btn
+            >
+            <v-btn color="green darken-1" text @click="dialog = false"
+              >Aceptar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -78,15 +108,16 @@ export default {
     return {
       dialog: false,
       Alumnos: [],
-
+      filtros: "",
+      buscar: "",
       Datos: {
         id: "",
-        Foto:"",
+        Foto: "",
         LU: "",
         Nombre: "",
         Apellido: "",
-        Facultad: ""
-      }
+        Facultad: "",
+      },
     };
   },
 
@@ -99,26 +130,46 @@ export default {
       this.Datos.Apellido = doc.data().Apellido;
       this.Datos.Facultad = doc.data().Facultad;
       this.dialog = true;
-    }
+    },
+  },
+
+  computed: {
+    Filtro() {
+      if (this.filtros === "DNI") {
+        return this.Alumnos.filter((alumnos) =>
+          alumnos.data().dni.includes(this.buscar)
+        );
+      } else if (this.filtros === "Nombre") {
+        return this.Alumnos.filter((alumnos) =>
+          alumnos.data().Nombre.includes(this.buscar)
+        );
+      } else if (this.filtros === "Apellido") {
+        return this.Alumnos.filter((alumnos) =>
+          alumnos.data().Apellido.includes(this.buscar)
+        );
+      } else {
+        return this.Alumnos;
+      }
+    },
   },
 
   mounted() {
     db.collection("Alumnos")
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           this.Alumnos.push(doc);
         });
       });
-  }
+  },
 };
 </script>
 
 
 <style scoped="">
 img.preview {
-    width: 50px; height: 50px;
+  width: 50px;
+  height: 50px;
 }
-
 </style>

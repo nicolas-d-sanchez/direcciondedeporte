@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="end">
+  <v-row  justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <v-btn text rounded v-on="on">Agregar Usuario</v-btn>
