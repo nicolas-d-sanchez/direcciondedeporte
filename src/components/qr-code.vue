@@ -1,4 +1,6 @@
 <template>
+  <div>
+
   
   <v-container id="credencialgen">
     <h1>Credencial Alumno</h1>
@@ -7,6 +9,7 @@
         
         <img class="preview"  v-bind:src="datos.Foto" >
       </v-col>
+      
       <v-col  md="6">
         <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
       </v-col>
@@ -19,13 +22,18 @@
       </ul>
  
     </v-row>
-  
     
-  </V-container>
+    
+    
+  </v-container>
+  <v-btn @click="DescargarPdf">Descargar</v-btn>
+  </div>
+  
 </template>
 
 
 <script>
+import jsPDF from 'jspdf'
   import QrcodeVue from 'qrcode.vue'
  
   export default {
@@ -33,10 +41,35 @@
     data() {
       return {
         size: 200,
+        value: '',
       }
     },
+    methods:{
+          DescargarPdf() {
+     
+      
+      var doc = new jsPDF();
+      doc.setDrawColor(0);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(20, 20, 85, 55, 3, 3, "FD");
+      doc.setFontSize(12);
+      doc.text("Credencial Alumno", 40, 25);
+      doc.addImage("this.datos.Foto", "jpeg", 25, 28, 25, 25);
+      doc.addImage("this.datos.Foto", "JPEG", 75, 28, 25, 25);
+      doc.setFontSize(9);
+      doc.text("LU: ", 25, 58);
+      doc.text(this.datos.lu, 40,58);
+      doc.text("Nombre: ", 25, 62);
+      doc.text(this.datos.Nombre, 40,62);
+      doc.text("Apellido: ", 25, 66);
+      doc.text (this.datos.Apellido, 40, 66);
+      doc.text("Carrera: ", 25, 70);
+      doc.text(this.datos.Facultad, 40,70);
+      doc.save("into.pdf");
+    },
+    },
     components: {
-      QrcodeVue,
+      QrcodeVue,jsPDF,
     },
   }
 </script> 

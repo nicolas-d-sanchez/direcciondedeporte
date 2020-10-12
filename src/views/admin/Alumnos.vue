@@ -67,6 +67,7 @@
                   <v-btn text small text-center @click="credencial(item)"
                     >Generar credencial</v-btn
                   >
+                  
                 </td>
               </tr>
             </tbody>
