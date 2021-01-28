@@ -75,8 +75,9 @@
 </template>
 
 <script>
-import { fb, db} from '@/components/FirebaseInit'
+import { fb, db } from '@/components/FirebaseInit.js'
 import { firestore } from 'firebase';
+import firebase from 'firebase';
 
 export default {
   
@@ -115,7 +116,11 @@ export default {
     }
   },
   methods: {
+  
     addData() {
+            // Aca no le estoy pasando los parametros como strings para q cree el usuario en authentication, a parte para el login
+            //dps hay que validar q sea Administrador del firestore (para la pag) y Profesor para la App.
+      firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
       db.collection("Usuarios").add(
         this.User
         )
