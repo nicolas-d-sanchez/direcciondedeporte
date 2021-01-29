@@ -10,7 +10,7 @@
           <span class="headline">Datos de Usuario</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
+          <v-form>
             <v-row>
               <v-col cols="12" sm="6" md="6">
                 <v-text-field id="Nombre" v-model="User.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
@@ -46,7 +46,7 @@
               </v-col> -->
 
             </v-row>
-          </v-container>
+          </v-form>
           <small>*Todos los item son requeridos</small>
         </v-card-text>
         <v-card-actions>
@@ -64,7 +64,7 @@
 import { fb, db} from '@/components/FirebaseInit'
 
 export default {
-  props:['User'],
+  props:{User: Object},
   name: "EditUser",
   data() {
     return {

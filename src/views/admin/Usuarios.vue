@@ -100,6 +100,15 @@ export default {
   },
 
   methods: {
+    Leeruser(){
+      db.collection("Usuarios")
+      .get()
+      .then(onSnapshot => {
+        onSnapshot.forEach(doc => {
+          this.Usuario.push(doc);
+        });
+      });
+    },
     deleteUser(doc) {
 
       var UsuariosRef = db.collection("Usuarios").doc(doc);
@@ -126,6 +135,8 @@ export default {
           console.error("Error Al Modifica Usuario: ", error);
         });
     },
+
+
     
   },
 
@@ -151,14 +162,9 @@ export default {
   },
 
   mounted() {
-    db.collection("Usuarios")
-      .get()
-      .then(onSnapshot => {
-        onSnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          this.Usuario.push(doc);
-        });
-      });
+    
+       this.Leeruser();
+     
   },
 
 }

@@ -147,7 +147,7 @@ export default {
         .add(this.DatosAlumnos)
         .then(function () {
           window.location.reload();
-          window.location.reload();
+          
         })
         .catch(function (error) {
           console.error("Error writing document: ", error);
