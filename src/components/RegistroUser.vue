@@ -1,5 +1,5 @@
 <template>
-  <v-row  justify="end">
+  <v-form @submit="addData()" justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <v-btn text rounded v-on="on">Agregar Usuario</v-btn>
@@ -67,12 +67,19 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="Limpiar">Cerrar</v-btn>
+<<<<<<< HEAD
           <v-btn color="blue darken-1" text @click="addData">Guardar</v-btn>
           
+=======
+          
+          <v-btn color="blue darken-1" text  >Guardar</v-btn>
+>>>>>>> 1b56835fab26032e4cb76543f72dd36ee3142de0
         </v-card-actions>
       </v-card>
+      
     </v-dialog>
-  </v-row>
+    
+  </v-form>
 </template>
 
 <script>

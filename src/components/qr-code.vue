@@ -1,113 +1,125 @@
 <template>
   <div>
-
-  
-  <v-container id="credencialgen">
-    <h1>Credencial Alumno</h1>
-    <v-row>
-      <v-col md="6">
-        
-        <img class="preview"  v-bind:src="datos.Foto" >
-      </v-col>
+    <vue-html2pdf
+      :show-layout="false"
+      :float-layout="false"
+      :enable-download="true"
+      :preview-modal="false"
+      :paginate-elements-by-height="1400"
       
-      <v-col  md="6">
-        <qrcode-vue :value="datos.id" :size="size" level="H"></qrcode-vue>
-      </v-col>
-      <ul id="datos">
-     
-        <ul>LU: {{datos.lu}}</ul>
-        <ul>Nombre: {{datos.Nombre}}</ul>
-        <ul>Apellido: {{datos.Apellido}}</ul>
-        <ul>Facultad: {{datos.Facultad}}</ul> 
-      </ul>
- 
-    </v-row>
-    
-    
-    
-  </v-container>
-  <v-btn @click="DescargarPdf">Descargar</v-btn>
+      :pdf-quality="2"
+      :manual-pagination="false"
+      pdf-format="a4"
+      pdf-orientation="portrait"
+      pdf-content-width="500px"
+      ref="html2Pdf"
+    >
+      <section slot="pdf-content">
+        <v-container id="credencialgen">
+          <h1>Credencial Alumno</h1>
+           
+          <v-row no-gutters>
+            
+            <v-col>
+              <img id="foto"  height="95px" width="95px" :src="Datos.Foto" />
+            </v-col>
+
+            <v-col>
+              <qrcode-vue
+                class="qr"
+                :value="Datos.id"
+                :size="size"
+                level="H"
+              ></qrcode-vue>
+            </v-col>
+
+             
+          </v-row>          
+           
+          <ul id="datosS" style="font-family: 'Source Sans Pro'; font-size: 10px;">             
+              <ul>LU:{{Datos.lu}}</ul>
+              <ul>Nombre:{{Datos.Nombre}}</ul>
+              <ul>Apellido:{{Datos.Apellido}}</ul>
+              <ul>Facultad:{{Datos.Facultad}}</ul>
+            </ul>   
+          
+          
+        </v-container>
+      </section>
+    </vue-html2pdf>
+    <v-btn @click="generateReport">Descargar</v-btn>
   </div>
-  
 </template>
 
 
 <script>
-import jsPDF from 'jspdf'
-  import QrcodeVue from 'qrcode.vue'
- 
-  export default {
-    props:[ 'datos' ],
-    data() {
-      return {
-        size: 200,
-        value: '',
-      }
-    },
-    methods:{
-          DescargarPdf() {
-     
-      
-      var doc = new jsPDF();
-      doc.setDrawColor(0);
-      doc.setFillColor(255, 255, 255);
-      doc.roundedRect(20, 20, 85, 55, 3, 3, "FD");
-      doc.setFontSize(12);
-      doc.text("Credencial Alumno", 40, 25);
-      doc.addImage("this.datos.Foto", "jpeg", 25, 28, 25, 25);
-      doc.addImage("this.datos.Foto", "JPEG", 75, 28, 25, 25);
-      doc.setFontSize(9);
-      doc.text("LU: ", 25, 58);
-      doc.text(this.datos.lu, 40,58);
-      doc.text("Nombre: ", 25, 62);
-      doc.text(this.datos.Nombre, 40,62);
-      doc.text("Apellido: ", 25, 66);
-      doc.text (this.datos.Apellido, 40, 66);
-      doc.text("Carrera: ", 25, 70);
-      doc.text(this.datos.Facultad, 40,70);
-      doc.save("into.pdf");
-    },
-    },
-    components: {
-      QrcodeVue,jsPDF,
-    },
-  }
-</script> 
+import { fb, db } from "@/components/FirebaseInit.js";
+import VueHtml2pdf from "vue-html2pdf";
+import QrcodeVue from "qrcode.vue";
 
+export default {
+  components: {
+    QrcodeVue,
+    VueHtml2pdf,
+  },
+  props: {
+     Datos: Object,
+  },
+     
+   
+
+
+  data() {
+    return {
+      size: 95,
+      value: "",
+      imageURL:'',
+    };
+  },
+
+  methods: {
+    generateReport() {
+      this.$refs.html2Pdf.generatePdf();
+      
+    },
+  
+
+  },
+
+
+
+};
+</script> 
 
 
 <style scoped>
 
-img.preview {
-    width: 200px; height: 200px;
-    
-}
 
-h1 {
-  margin-top: 25px;
-}
 #credencialgen {
   /* background-color: rgb(143, 202, 183); */
-  width: 650px;
-  height: 460px;
+  width: 321px;
+  height: 207px;
   text-align: center;
-  border:solid 2px #000000;
- 
+  border: solid 2px #000000;
   border-radius: 15px;
   border-width: 5px;
+  margin-top: 15px;
   margin-left: 15px;
   margin-right: 15px;
 }
+
 #qrcode {
   margin-bottom: auto;
   text-align: match-parent;
 }
-#datos{
-  text-align: left
+
+#datosS { 
+  text-align: left;
+   
 }
 #credencialgen #qrcode {
-  text-align: center;
+  text-align: left;
   margin-bottom: 5px;
-  
 }
+
 </style>

@@ -35,12 +35,13 @@
           >
           </v-text-field>
         </v-col>
+        <registro-new />
         <RegistroAlumnos />
       </v-row>
 
       <v-flex xs12>
         <v-simple-table height="400px">
-          <template v-slot:default>
+          
             <thead>
               <tr>
                 <th class="text-left">Foto</th>
@@ -64,24 +65,22 @@
                 <td>{{ item.data().Direccion }}</td>
                 <td>
                   <EditAlumno :Alumnos="item"></EditAlumno>
-                  <v-btn text small text-center @click="credencial(item)"
-                    >Generar credencial</v-btn
-                  >
-                  
+                  <v-btn text small text-center @click="credencial(item)">                    
+                    Generar credencial
+                  </v-btn>
                 </td>
+                 
               </tr>
             </tbody>
-          </template>
+          
         </v-simple-table>
       </v-flex>
     </v-layout>
     <v-row justify="center">
-      <v-dialog v-model="dialog" max-width="680" max-hight="400">
+      <v-dialog v-model="dialog" max-width="500" max-hight="400">
         <v-card>
           <v-card-text></v-card-text>
-
-          <qrcode :datos="Datos"></qrcode>
-
+          <qrcode :Datos="Datos"></qrcode>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" text @click="dialog = false"
@@ -98,12 +97,14 @@
 </template>
 
 <script>
+import RegistroNew from "@/components/RegistroNew";
 import RegistroAlumnos from "@/components/RegistroAlumno";
 import { fb, db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
+import pdf from "@/components/pdf.vue";
 import EditAlumno from "@/components/EditAlumno.vue";
 export default {
-  components: { RegistroAlumnos, qrcode, EditAlumno },
+  components: { RegistroAlumnos, qrcode, EditAlumno, pdf , RegistroNew},
 
   data() {
     return {
@@ -123,15 +124,19 @@ export default {
   },
 
   methods: {
-    credencial(doc) {
-      this.Datos.id = doc.id;
-      this.Datos.Foto = doc.data().Foto;
-      this.Datos.lu = doc.data().lu;
-      this.Datos.Nombre = doc.data().Nombre;
-      this.Datos.Apellido = doc.data().Apellido;
-      this.Datos.Facultad = doc.data().Facultad;
+    credencial(item) {
+      
+      this.Datos.id = item.id;      
+      this.Datos.Foto = item.data().Foto;
+      this.Datos.lu = item.data().lu;
+      this.Datos.Nombre = item.data().Nombre;
+      this.Datos.Apellido = item.data().Apellido;
+      this.Datos.Facultad = item.data().Facultad;
       this.dialog = true;
+      
     },
+
+   
   },
 
   computed: {
