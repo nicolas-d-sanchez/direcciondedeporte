@@ -12,12 +12,12 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field v-model="User.Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field v-model="User.nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
-                  v-model="User.Apellido"
+                  v-model="User.apellido"
                   :rules="[rules.required]"
                   label="Apellido*"
                   persistent-hint
@@ -26,7 +26,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="User.Email"
+                  v-model="User.email"
                   label="Email*"
                   :rules="[rules.required,rules.email]"
                 ></v-text-field>
@@ -53,7 +53,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  v-model="User.TipoUser"
+                  v-model="User.tipoUser"
                   :items="['Administrador', 'Profesor']"
                   label="Tipo Usuario*"
                   :rules="[rules.required]"
@@ -68,6 +68,7 @@
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="Limpiar">Cerrar</v-btn>
           <v-btn color="blue darken-1" text @click="addData">Guardar</v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -75,9 +76,8 @@
 </template>
 
 <script>
-import { fb, db } from '@/components/FirebaseInit.js'
-import { firestore } from 'firebase';
-import firebase from 'firebase';
+import { fb, db } from '@/components/FirebaseInit.js';
+
 
 export default {
   
@@ -90,12 +90,12 @@ export default {
       
       User: {    
         dni:"",    
-        Nombre: "",
-        Apellido: "",
-        Email: "",
+        nombre: "",
+        apellido: "",
+        email: "",
         password: "",
-        TipoUser: "",
-        Estado:"",
+        tipoUser: "",
+        estado:"",
         
       },
 
@@ -116,22 +116,34 @@ export default {
     }
   },
   methods: {
-  
+    createUser(){
+      fb.auth().createUserWithEmailAndPassword(this.User.email.toString(),this.User.password.toString())
+      .then((user) => {
+    // Signed in
+    // ..
+      console.log(user)
+  })
+      .catch(err => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ..
+  });
+    },
     addData() {
             // Aca no le estoy pasando los parametros como strings para q cree el usuario en authentication, a parte para el login
             //dps hay que validar q sea Administrador del firestore (para la pag) y Profesor para la App.
-      firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
+      
       db.collection("Usuarios").add(
         this.User
         )
         .then(function() {
           
-          window.location.reload();
+          window.location.reload()
         })
         .catch(function(error) {
           console.error("Error writing document: ", error);
         });
-      
+        this.createUser(),
         this.dialog = false;        
 
     },
