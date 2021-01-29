@@ -67,13 +67,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="Limpiar">Cerrar</v-btn>
-<<<<<<< HEAD
+
           <v-btn color="blue darken-1" text @click="addData">Guardar</v-btn>
           
-=======
+
           
           <v-btn color="blue darken-1" text  >Guardar</v-btn>
->>>>>>> 1b56835fab26032e4cb76543f72dd36ee3142de0
+
         </v-card-actions>
       </v-card>
       
