@@ -5,8 +5,7 @@
       :float-layout="false"
       :enable-download="true"
       :preview-modal="false"
-      :paginate-elements-by-height="1400"
-      
+      :paginate-elements-by-height="1400"      
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -21,7 +20,7 @@
           <v-row no-gutters>
             
             <v-col>
-              <img id="foto"  height="95px" width="95px" :src="Datos.Foto" />
+              <img id="foto"  height="95px" width="95px" :src="Datos.foto" />
             </v-col>
 
             <v-col>
@@ -37,10 +36,10 @@
           </v-row>          
            
           <ul id="datosS" style="font-family: 'Source Sans Pro'; font-size: 10px;">             
-              <ul>LU:{{Datos.lu}}</ul>
-              <ul>Nombre:{{Datos.Nombre}}</ul>
-              <ul>Apellido:{{Datos.Apellido}}</ul>
-              <ul>Facultad:{{Datos.Facultad}}</ul>
+              <ul>LU: {{Datos.lu}}</ul>
+              <ul>Nombre: {{Datos.nombre}}</ul>
+              <ul>Apellido: {{Datos.apellido}}</ul>
+              <ul>Facultad: {{Datos.facultad}}</ul>
             </ul>   
           
           

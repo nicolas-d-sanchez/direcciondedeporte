@@ -21,15 +21,15 @@
 
 
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Nombre" v-model="Alumnos.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field id="Nombre" v-model="Alumnos.data().nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Apellido" v-model="Alumnos.data().Apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
+                <v-text-field id="Apellido" v-model="Alumnos.data().apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
               </v-col>
               
               <v-col cols="12">
-                <v-text-field id="Email" v-model="Alumnos.data().Email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
+                <v-text-field id="Email" v-model="Alumnos.data().email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
               </v-col>
               <!-- <v-col cols="12">
                 <v-text-field
@@ -95,28 +95,29 @@ export default {
       var NombreN = document.getElementById('Nombre').value;
       var ApellidoN = document.getElementById('Apellido').value;
       var EmailN = document.getElementById('Email').value;
-      var DniN = document.getElementById('Dni').value;
-  
-      
+      var DniN = document.getElementById('Dni').value;      
       var AlumnosRef = db.collection("Alumnos").doc(this.Alumnos.id);
 
       
       return AlumnosRef.update({
           lu: luN,
-          Nombre: NombreN,
-          Apellido: ApellidoN,
-          Email: EmailN,
+          nombre: NombreN,
+          apellido: ApellidoN,
+          email: EmailN,
           dni: DniN,
+         
       })
-      .then( () => this.$mount())
+      .then( () => this.$mount(
+        this.dialog = false,
+      ))
         
       .catch(function(error) {
           // The document probably doesn't exist.
           console.error("Error Al Modifica Alumnos: ", error);
       });
 
-      
-     }
+        
+        }
         
     
   }

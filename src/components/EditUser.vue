@@ -13,15 +13,15 @@
           <v-form>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Nombre" v-model="User.data().Nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field id="Nombre" v-model="User.data().nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Apellido" v-model="User.data().Apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
+                <v-text-field id="Apellido" v-model="User.data().apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
               </v-col>
               
               <v-col cols="12">
-                <v-text-field id="Email" v-model="User.data().Email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
+                <v-text-field id="Email" v-model="User.data().email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
               </v-col>
               <!-- <v-col cols="12">
                 <v-text-field
@@ -93,23 +93,18 @@ export default {
 
       
       return UsuariosRef.update({
-          Nombre: NombreN,
-          Apellido: ApellidoN,
-          Email: EmailN,
+          nombre: NombreN,
+          apellido: ApellidoN,
+          email: EmailN,
           dni: DniN,
       })
-      .then(function() {
-        
-        // window.location.reload();
-        
-           
-      })
+      .then(function() {       })
       .catch(function(error) {
           // The document probably doesn't exist.
           console.error("Error Al Modifica Usuario: ", error);
-      });
+      }),
 
-      
+      this.dialog = false;
      }
         
     

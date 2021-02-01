@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit="addData()" justify="end">
+  <v-form justify="end">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <v-btn text rounded v-on="on">Agregar Usuario</v-btn>
@@ -12,12 +12,12 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field v-model="User.nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field v-model="usuario.nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
-                  v-model="User.apellido"
+                  v-model="usuario.apellido"
                   :rules="[rules.required]"
                   label="Apellido*"
                   persistent-hint
@@ -26,14 +26,14 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="User.email"
+                  v-model="usuario.email"
                   label="Email*"
                   :rules="[rules.required,rules.email]"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="User.password"
+                  v-model="usuario.password"
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="[rules.required,rules.minPassword]"
                   :type="show1 ? 'text' : 'password'"
@@ -46,14 +46,14 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="User.dni"
+                  v-model="usuario.dni"
                   label="DNI*"
                   :rules="[rules.required]"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  v-model="User.tipoUser"
+                  v-model="usuario.tipoUser"
                   :items="['Administrador', 'Profesor']"
                   label="Tipo Usuario*"
                   :rules="[rules.required]"
@@ -69,10 +69,6 @@
           <v-btn color="blue darken-1" text @click="Limpiar">Cerrar</v-btn>
 
           <v-btn color="blue darken-1" text @click="addData">Guardar</v-btn>
-          
-
-          
-          <v-btn color="blue darken-1" text  >Guardar</v-btn>
 
         </v-card-actions>
       </v-card>
@@ -95,7 +91,7 @@ export default {
       dialog: false,
       show1: false,
       
-      User: {    
+      usuario: {    
         dni:"",    
         nombre: "",
         apellido: "",
@@ -117,18 +113,18 @@ export default {
       }
     };
   },
-  firestore(){
-    return{
-      usuarios: db.collection('Usuarios'),
-    }
-  },
+  // firestore(){
+  //   return{
+  //     usuarios: db.collection('Usuarios'),
+  //   }
+  // },
   methods: {
     createUser(){
-      fb.auth().createUserWithEmailAndPassword(this.User.email.toString(),this.User.password.toString())
-      .then((user) => {
+      fb.auth().createUserWithEmailAndPassword(this.usuario.email.toString(),this.usuario.password.toString())
+      .then((usuario) => {
     // Signed in
     // ..
-      console.log(user)
+      console.log(usuario)
   })
       .catch(err => {
     var errorCode = error.code;
@@ -141,11 +137,11 @@ export default {
             //dps hay que validar q sea Administrador del firestore (para la pag) y Profesor para la App.
       
       db.collection("Usuarios").add(
-        this.User
+        this.usuario
         )
         .then(function() {
           
-          window.location.reload()
+            console.log("Usuario Creado");
         })
         .catch(function(error) {
           console.error("Error writing document: ", error);
