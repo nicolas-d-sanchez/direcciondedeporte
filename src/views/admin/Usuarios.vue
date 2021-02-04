@@ -38,7 +38,7 @@
       <RegistroUser />
     </v-row>
 
-    <v-simple-table  height="400px">
+    <v-simple-table height="400px">
       <template v-slot:default>
         <thead>
           <tr>
@@ -51,19 +51,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in usuario" :key="item.id">
+          <tr v-for="item in Filtro" :key="item.id">
             <td>{{ item.data().dni }}</td>
             <td>{{ item.data().nombre }}</td>
             <td>{{ item.data().apellido }}</td>
             <td>{{ item.data().email }}</td>
-            <td>{{ item.data().tipoUser }}</td>
+            <td>{{ item.data().tipoUsuario }}</td>
             <td>
               <EditUser :User="item"></EditUser>
               <v-btn
                 text
                 small
                 text-center
-                v-if="item.data().Estado === ''"
+                v-if="item.data().estado === ''"
                 @click="AltaUser(item.id)"
                 >Alta</v-btn
               >
@@ -71,7 +71,7 @@
                 text
                 small
                 text-center
-                v-if="item.data().Estado === 'true'"
+                v-if="item.data().estado === 'true'"
                 @click="deleteUser(item.id)"
                 >Baja</v-btn
               >
@@ -87,7 +87,7 @@
 import RegistroUser from "@/components/RegistroUser.vue";
 import EditUser from "@/components/EditUser.vue";
 
-import { fb, db } from "@/components/FirebaseInit.js";
+import {  db } from "@/components/FirebaseInit.js";
 
 export default {
   name: "Usuarios",
@@ -97,13 +97,11 @@ export default {
     return {
       buscar: "",
       filtros: "",
-      usuario: [],
+      usuarios: [],
     };
   },
 
   methods: {
-    
-
     deleteUser(doc) {
       var UsuariosRef = db.collection("Usuarios").doc(doc);
       return UsuariosRef.update({
@@ -132,35 +130,32 @@ export default {
   },
 
   computed: {
-    // Filtro() {
-    //   if (this.filtros === "DNI") {
-    //     return this.usuario.filter((usuario) =>
-    //       usuario.data().dni.includes(this.buscar)
-    //     );
-    //   } else if (this.filtros === "Nombre") {
-    //     console.log(this.buscar);
-    //     return this.usuario.filter((usuario) =>
-    //       usuario.data().nombre.includes(this.buscar)
-    //     );
-    //   } else if (this.filtros === "Apellido") {
-    //     return this.usuario.filter((usuario) =>
-    //       usuario.data().apellido.includes(this.buscar)
-    //     );
-    //   } else {
-    //     return this.Usuario;
-    //   }
-    // },
+    Filtro() {
+      if (this.filtros === "DNI") {
+        return this.usuarios.filter((usuarios) => {
+          return usuarios.data().dni.includes(this.buscar);
+        });
+      } else if (this.filtros === "Nombre") {
+        return this.usuarios.filter((usuarios) => {
+          return usuarios.data().nombre.includes(this.buscar);
+        });
+      } else if (this.filtros === "Apellido") {
+        return this.usuarios.filter((usuarios) => {
+          return usuarios.data().apellido.includes(this.buscar);
+        });
+      } else {
+        return this.usuarios;
+      }
+    },
   },
 
   mounted() {
-    db.collection("Usuarios")
-        .onSnapshot
-      (querySnapshot => {
-          this.usuario = [];
-          querySnapshot.forEach(doc => {
-            this.usuario.push(doc);
-          })
-      })
+    db.collection("Usuarios").onSnapshot((querySnapshot) => {
+      this.usuarios = [];
+      querySnapshot.forEach((doc) => {
+        this.usuarios.push(doc);
+      });
+    });
   },
 };
 </script>

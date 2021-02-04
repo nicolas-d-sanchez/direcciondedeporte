@@ -79,17 +79,7 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" max-width="500" max-hight="400">
         <v-card>
-          <v-card-text></v-card-text>
           <qrcode :Datos="Datos"></qrcode>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false"
-              >Enviar por Email</v-btn
-            >
-            <v-btn color="green darken-1" text @click="dialog = false"
-              >Aceptar</v-btn
-            >
-          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
@@ -99,7 +89,7 @@
 <script>
 
 import RegistroAlumno from "@/components/RegistroAlumno";
-import { fb, db } from "@/components/FirebaseInit.js";
+import { db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
 import pdf from "@/components/pdf.vue";
 import EditAlumno from "@/components/EditAlumno.vue";

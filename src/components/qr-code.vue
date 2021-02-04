@@ -1,28 +1,25 @@
 <template>
-  <div>
+  <v-container>
     <vue-html2pdf
       :show-layout="false"
       :float-layout="false"
       :enable-download="true"
       :preview-modal="false"
-      :paginate-elements-by-height="1400"      
+      :paginate-elements-by-height="1400"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
+      :filename="Datos.lu"
       pdf-orientation="portrait"
-      pdf-content-width="500px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
         <v-container id="credencialgen">
           <h1>Credencial Alumno</h1>
-           
           <v-row no-gutters>
-            
             <v-col>
-              <img id="foto"  height="95px" width="95px" :src="Datos.foto" />
+              <img id="foto" height="95px" width="95px" :src="Datos.foto" />
             </v-col>
-
             <v-col>
               <qrcode-vue
                 class="qr"
@@ -31,28 +28,25 @@
                 level="H"
               ></qrcode-vue>
             </v-col>
-
-             
-          </v-row>          
-           
-          <ul id="datosS" style="font-family: 'Source Sans Pro'; font-size: 10px;">             
-              <ul>LU: {{Datos.lu}}</ul>
-              <ul>Nombre: {{Datos.nombre}}</ul>
-              <ul>Apellido: {{Datos.apellido}}</ul>
-              <ul>Facultad: {{Datos.facultad}}</ul>
-            </ul>   
-          
-          
+          </v-row>
+          <ul id="datosS" style="font-family: 'Source Sans Pro'; font-size: 10px">
+            <ul>LU: {{ Datos.lu }}
+            </ul>
+            <ul>Nombre: {{ Datos.nombre }}
+            </ul>
+            <ul>Apellido: {{ Datos.apellido }}
+            </ul>
+            <ul>Facultad: {{ Datos.facultad }}
+            </ul>
+          </ul>
         </v-container>
       </section>
     </vue-html2pdf>
     <v-btn @click="generateReport">Descargar</v-btn>
-  </div>
+  </v-container>
 </template>
 
-
 <script>
-import { fb, db } from "@/components/FirebaseInit.js";
 import VueHtml2pdf from "vue-html2pdf";
 import QrcodeVue from "qrcode.vue";
 
@@ -62,40 +56,33 @@ export default {
     VueHtml2pdf,
   },
   props: {
-     Datos: Object,
+    Datos: Object,
+    
   },
-     
-   
-
 
   data() {
     return {
+      dialog: "",
       size: 95,
       value: "",
-      imageURL:'',
+      image: "",
+      completo: "",
     };
   },
 
   methods: {
-    generateReport() {
+    
+    generateReport() {     
       this.$refs.html2Pdf.generatePdf();
-      
+     
     },
-  
-
   },
-
-
-
 };
-</script> 
-
+</script>
 
 <style scoped>
-
-
 #credencialgen {
-  /* background-color: rgb(143, 202, 183); */
+  background-color: #ffffff; 
   width: 321px;
   height: 207px;
   text-align: center;
@@ -112,13 +99,11 @@ export default {
   text-align: match-parent;
 }
 
-#datosS { 
+#datosS {
   text-align: left;
-   
 }
 #credencialgen #qrcode {
   text-align: left;
   margin-bottom: 5px;
 }
-
 </style>
