@@ -1,4 +1,4 @@
-<template>
+<template >
   <v-container v-resize="onResize">
     <v-app-bar app color="white" height="70" flat>
       <v-avatar  class="mr-3" color="grey lighten-5" size="70">
@@ -8,7 +8,7 @@
       <v-toolbar-title
         class="font-weight-black headline"
         v-show="windowSize.x>650"
-      >Direccion de Deporte UNNE</v-toolbar-title>
+      >Direccion de Deporte UNNE </v-toolbar-title>
 
       <v-toolbar-title class="font-weight-black headline" v-show="windowSize.x<650">UNNE</v-toolbar-title>
 
@@ -33,7 +33,8 @@
 
       <v-divider></v-divider>
 
-      <v-list nav dense>
+    
+      <v-list nav dense >
         <v-list-item v-for="item in items" :key="item.text" :to="item.link">
           <v-list-item-icon>
             <v-icon>{{item.icon}}</v-icon>
@@ -45,7 +46,7 @@
         <div class="pa-2">
           <v-btn block text @click="CerrarSesion">Logout</v-btn>
         </div>
-      </template>
+      </template> 
     </v-navigation-drawer>
 
     <v-content>
@@ -58,14 +59,19 @@
 
 <script>
 
-import firebase from 'firebase/app'
+import { fb, db } from '@/components/FirebaseInit'
 export default {
   name: "Panel",
   components: {},
   data() {
     return {
+      tipoUser : "",
        user: [
-          {userEmail:"", userName:"",}         
+          {
+          userEmail:"", 
+          userName:"",
+          tipoUser:"",
+          }         
         ],
       windowSize: {
         x: 0,
@@ -84,21 +90,66 @@ export default {
 
   mounted() {
     this.onResize();
-    this.mostrasUsuario()
+    this.mostrasUsuario();
+   
+
   },
 
+  // computed:{
+  //       Control(){                  
+          
+  //         this.tipoUser = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get().then( function(doc) {
+  //           console.log(doc.data().tipoUsuario);
+  //                return doc.data().tipoUsuario;
+  //         }).catch(function(error) {
+  //             console.log("Error getting document:", error);
+  //         });
+  //         console.log(this.tipoUser);
+  //         if (this.tipoUser == "Administrativo"){
+  //           return true;
+  //         }else {
+  //           return false;
+  //         };
+
+  //   },
+  // },
   methods: {
+    // async Control(){            
+    //        await db.collection("Usuarios").doc(fb.auth().currentUser.uid).get().then( function(doc) {
+    //             console.log(doc.data().tipoUsuario);
+    //             return     doc.data().tipoUsuario;
+    //       }).catch(function(error) {
+    //           console.log("Error getting document:", error);
+    //       });
+          
+    // },
+
+    // Ver(){
+    //    let tipoUser = this.Control();
+    //   console.log(tipoUser);
+    //   if (tipoUser == "Administrativo"){
+    //         console.log("true");
+    //         return true;
+    //       }else {
+    //         console.log("False");
+    //         return false;
+    //       };
+    // },
+    
     onResize() {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight };
-    },
+    },  
 
     mostrasUsuario(){
-      this.user.userEmail= firebase.auth().currentUser.email
-      this.userName= firebase.auth().currentUser.email
+      if (fb.auth().currentUser != null){
+        this.user.userEmail= fb.auth().currentUser.email
+        this.userName= fb.auth().currentUser.email
+      }
+      
     },
 
     CerrarSesion() {
-      firebase
+      fb
         .auth()
         .signOut()
         .then(()=> {
@@ -111,5 +162,5 @@ export default {
         });
     }
   }
-};
+}
 </script>

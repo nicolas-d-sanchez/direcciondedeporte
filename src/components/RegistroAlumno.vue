@@ -244,7 +244,6 @@ export default {
     onUpload() {
       this.picture = null;
       const storageRef = fb
-        .storage()
         .ref("Fotos/" + `${this.imageData.name}`)
         .put(this.imageData);
       storageRef.on(

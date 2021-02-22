@@ -19,13 +19,7 @@
       </v-flex>
 
       <v-row>
-        <v-col sm="2" xl="12">
-        <v-select
-          v-model="filtros"
-          :items="['DNI', 'Nombre', 'Apellido']"
-          label="Tipo de Dato*"
-        ></v-select>
-      </v-col>
+       
       <v-col sm="3" xl="12">
         <v-text-field
           type="search"
@@ -55,7 +49,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in alumnos" :key="item.id">
+              <tr v-for="item in Filtro" :key="item.id">
                 <img class="preview" :src="item.data().foto" />
                 <td>{{ item.data().lu }}</td>
                 <td>{{ item.data().dni }}</td>
@@ -100,7 +94,6 @@ export default {
     return {
       dialog: false,
       alumnos: [],
-      filtros: "",
       buscar: "",
       Datos: {
         id: "",
@@ -131,21 +124,14 @@ export default {
 
   computed: {
     Filtro() {
-      if (this.filtros === "DNI") {
-        return this.alumnos.filter((alumnos) =>
-          alumnos.data().dni.includes(this.buscar)
-        );
-      } else if (this.filtros === "Nombre") {
-        return this.alumnos.filter((alumnos) =>
-          alumnos.data().nombre.includes(this.buscar)
-        );
-      } else if (this.filtros === "Apellido") {
-        return this.alumnos.filter((alumnos) =>
-          alumnos.data().apellido.includes(this.buscar)
-        );
-      } else {
-        return this.alumnos;
-      }
+      return this.alumnos.filter(alumnos => {
+          return alumnos.data().dni.includes(this.buscar) || 
+          alumnos.data().lu.includes(this.buscar) ||
+          alumnos.data().nombre.includes(this.buscar) || 
+          alumnos.data().apellido.includes(this.buscar) || 
+          alumnos.data().email.includes(this.buscar)
+          ;
+        });
     },
   },
 

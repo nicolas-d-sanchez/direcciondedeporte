@@ -19,13 +19,7 @@
     </v-layout>
 
     <v-row>
-      <v-col sm="2" xl="12">
-        <v-select
-          v-model="filtros"
-          :items="['DNI', 'Nombre', 'Apellido']"
-          label="Tipo de Dato*"
-        ></v-select>
-      </v-col>
+      
       <v-col sm="3" xl="12">
         <v-text-field
           type="search"
@@ -96,7 +90,6 @@ export default {
   data() {
     return {
       buscar: "",
-      filtros: "",
       usuarios: [],
     };
   },
@@ -131,21 +124,13 @@ export default {
 
   computed: {
     Filtro() {
-      if (this.filtros === "DNI") {
-        return this.usuarios.filter((usuarios) => {
-          return usuarios.data().dni.includes(this.buscar);
-        });
-      } else if (this.filtros === "Nombre") {
-        return this.usuarios.filter((usuarios) => {
-          return usuarios.data().nombre.includes(this.buscar);
-        });
-      } else if (this.filtros === "Apellido") {
-        return this.usuarios.filter((usuarios) => {
-          return usuarios.data().apellido.includes(this.buscar);
-        });
-      } else {
-        return this.usuarios;
-      }
+          return this.usuarios.filter(usuarios => {
+          return usuarios.data().dni.includes(this.buscar) || 
+          usuarios.data().nombre.includes(this.buscar) || 
+          usuarios.data().apellido.includes(this.buscar) || 
+          usuarios.data().email.includes(this.buscar)
+          ;
+        });      
     },
   },
 

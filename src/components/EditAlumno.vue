@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { fb, db} from '@/components/FirebaseInit'
+import { db} from '@/components/FirebaseInit'
 
 export default {
   props:['Alumnos'],

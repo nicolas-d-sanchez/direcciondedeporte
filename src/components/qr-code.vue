@@ -42,7 +42,8 @@
         </v-container>
       </section>
     </vue-html2pdf>
-    <v-btn @click="generateReport">Descargar</v-btn>
+    <v-spacer></v-spacer>
+    <v-btn text @click="generateReport">Descargar</v-btn>
   </v-container>
 </template>
 
@@ -80,7 +81,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
+.element.style{
+  width: auto;
+}
 #credencialgen {
   background-color: #ffffff; 
   width: 321px;

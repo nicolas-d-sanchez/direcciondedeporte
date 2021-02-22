@@ -42,7 +42,7 @@
 
 
 <script>
-import { fb, db } from "@/components/FirebaseInit.js";
+import { db } from "@/components/FirebaseInit.js";
 
 export default {
   name: "Mensajes",

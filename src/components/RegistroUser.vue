@@ -141,7 +141,7 @@ export default {
     ],
       dialog: false,
       show1: false,
-      tipoUsuario: ["Administrivo", "Profesor"],
+      tipoUsuario: ["Administrativo", "Profesor"],
       checkbox:"",
       datosUsuario: {    
         dni:"",    
@@ -157,35 +157,41 @@ export default {
   },
   
   methods: {
-    createUser(){
-      fb.auth().createUserWithEmailAndPassword(this.datosUsuario.email.toString(),this.datosUsuario.password.toString())
-      .then((usuario) => {
-    // Signed in
-    // ..
-      console.log(usuario)
-  })
+    addData(){
+      fb.auth().createUserWithEmailAndPassword(this.datosUsuario.email,this.datosUsuario.password)
+      .then((user) => {
+              db.collection("Usuarios").doc(user.user.uid).set(
+                  this.datosUsuario
+                  )
+                  .then(function() {                    
+                      console.log("Usuario Creado");
+                  })
+                  .catch(function(error) {
+                    console.error("Error writing document: ", error);
+                  });               
+            })
       .catch(err => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ..
-  });
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        
+    });
+        
+        this.dialog = false; 
     },
-    addData() {
+    // addData() {
       
-      db.collection("Usuarios").add(
-        this.datosUsuario
-        )
-        .then(function() {
-          
-            console.log("Usuario Creado");
-        })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
-        });
-        this.createUser(),
-        this.dialog = false;        
+      // db.collection("Usuarios").doc(usuario.usuario.uid).add(
+      //             this.datosUsuario
+      //             )
+      //             .then(function() {                    
+      //                 console.log("Usuario Creado");
+      //             })
+      //             .catch(function(error) {
+      //               console.error("Error writing document: ", error);
+      //             });
+               
 
-    },
+    // },
       clear() {
       this.$v.$reset();
       this.datosUsuario.nombre = "";
