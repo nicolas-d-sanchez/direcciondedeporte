@@ -8,7 +8,7 @@
       <v-toolbar-title
         class="font-weight-black headline"
         v-show="windowSize.x>650"
-      >Direccion de Deporte UNNE </v-toolbar-title>
+      >Direccion de Deporte UNNE  </v-toolbar-title>
 
       <v-toolbar-title class="font-weight-black headline" v-show="windowSize.x<650">UNNE</v-toolbar-title>
 
@@ -34,7 +34,7 @@
       <v-divider></v-divider>
 
     
-      <v-list nav dense >
+      <v-list nav dense v-if="this.control" >
         <v-list-item v-for="item in items" :key="item.text" :to="item.link">
           <v-list-item-icon>
             <v-icon>{{item.icon}}</v-icon>
@@ -65,12 +65,12 @@ export default {
   components: {},
   data() {
     return {
-      tipoUser : "",
+      control : null,
        user: [
           {
           userEmail:"", 
           userName:"",
-          tipoUser:"",
+          
           }         
         ],
       windowSize: {
@@ -95,47 +95,28 @@ export default {
 
   },
 
-  // computed:{
-  //       Control(){                  
-          
-  //         this.tipoUser = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get().then( function(doc) {
-  //           console.log(doc.data().tipoUsuario);
-  //                return doc.data().tipoUsuario;
-  //         }).catch(function(error) {
-  //             console.log("Error getting document:", error);
-  //         });
-  //         console.log(this.tipoUser);
-  //         if (this.tipoUser == "Administrativo"){
-  //           return true;
-  //         }else {
-  //           return false;
-  //         };
 
-  //   },
-  // },
+  created() {
+      this.isAdminF();
+  },
+ 
+ 
   methods: {
-    // async Control(){            
-    //        await db.collection("Usuarios").doc(fb.auth().currentUser.uid).get().then( function(doc) {
-    //             console.log(doc.data().tipoUsuario);
-    //             return     doc.data().tipoUsuario;
-    //       }).catch(function(error) {
-    //           console.log("Error getting document:", error);
-    //       });
-          
-    // },
+      isAdminF(){    
+        console.log("entro");        
+      let promesa = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get()     
+      promesa.then(snapshot => {
+      const data = snapshot.data().tipoUsuario;
+      if (data == "Administrativo"){
+        console.log("true");
+        this.control = true;
+      }else {
+        console.log("false");
+        this.control =  false;
+      }
+      })
+    },
 
-    // Ver(){
-    //    let tipoUser = this.Control();
-    //   console.log(tipoUser);
-    //   if (tipoUser == "Administrativo"){
-    //         console.log("true");
-    //         return true;
-    //       }else {
-    //         console.log("False");
-    //         return false;
-    //       };
-    // },
-    
     onResize() {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight };
     },  
