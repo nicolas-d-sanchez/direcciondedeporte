@@ -1,5 +1,5 @@
 <template >
-  <v-container v-resize="onResize">
+  <v-container v-resize="onResize" >
     <v-app-bar app color="white" height="70" flat>
       <v-avatar  class="mr-3" color="grey lighten-5" size="70">
         <v-img contain max-height="100%" src="@/assets/logo.png"></v-img>
@@ -102,16 +102,13 @@ export default {
  
  
   methods: {
-      isAdminF(){    
-        console.log("entro");        
+      isAdminF(){        
       let promesa = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get()     
       promesa.then(snapshot => {
       const data = snapshot.data().tipoUsuario;
       if (data == "Administrativo"){
-        console.log("true");
         this.control = true;
       }else {
-        console.log("false");
         this.control =  false;
       }
       })
