@@ -43,7 +43,11 @@ Vue.use(VueRouter)
             name: 'Mensajes',
             component: () => import('../views/admin/Mensajes.vue')
           },
-
+          {
+            path: 'Perfil',
+            name: 'Perfil',
+            component: () => import('../views/admin/Perfil.vue')
+          },
         ]
       },
   

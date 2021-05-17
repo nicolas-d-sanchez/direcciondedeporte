@@ -23,17 +23,27 @@
           </v-list-item-avatar>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item >
           <v-list-item-content>
             <v-list-item-title class="title">{{this.user.userEmail}}</v-list-item-title>
             <v-list-item-subtitle>{{this.user.userEmail}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
+    
+            
       <v-divider></v-divider>
 
-    
+      <v-list nav dense>
+        <v-list-item to="/Panel/Perfil">          
+          <v-list-item-icon>
+            <v-icon>mdi-account-circle</v-icon>
+            </v-list-item-icon>
+          <v-list-item-title>Perfil</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      
+      <v-divider></v-divider>
       <v-list nav dense v-if="this.control" >
         <v-list-item v-for="item in items" :key="item.text" :to="item.link">
           <v-list-item-icon>
@@ -42,6 +52,7 @@
           <v-list-item-title>{{item.text}}</v-list-item-title>
         </v-list-item>
       </v-list>
+
       <template v-slot:append>
         <div class="pa-2">
           <v-btn block text @click="CerrarSesion">Logout</v-btn>
@@ -102,7 +113,7 @@ export default {
  
  
   methods: {
-      isAdminF(){        
+    isAdminF(){        
       let promesa = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get()     
       promesa.then(snapshot => {
       const data = snapshot.data().tipoUsuario;
@@ -110,7 +121,7 @@ export default {
         this.control = true;
       }else {
         this.control =  false;
-      }
+      } 
       })
     },
 

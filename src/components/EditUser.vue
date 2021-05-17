@@ -1,6 +1,6 @@
 <template>
-    
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-container>
+    <v-dialog v-model="dialog"  max-width="600px">
       <template v-slot:activator="{ on }">
         <v-btn text small v-on="on">Editar</v-btn>
       </template>
@@ -13,37 +13,21 @@
           <v-form>
             <v-row>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Nombre" v-model="User.data().nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
+                <v-text-field id="Nombre" v-model="User.nombre" label="Nombre*" :rules="[rules.required]"></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="6">
-                <v-text-field id="Apellido" v-model="User.data().apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
+                <v-text-field id="Apellido" v-model="User.apellido" :rules="[rules.required]" label="Apellido*" persistent-hint required></v-text-field>
               </v-col>
               
               <v-col cols="12">
-                <v-text-field id="Email" v-model="User.data().email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
+                <v-text-field id="Email" v-model="User.email" label="Email*" :rules="[rules.required,rules.email]"></v-text-field>
               </v-col>
-              <!-- <v-col cols="12">
-                <v-text-field
-                  v-model="User.password"
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="[rules.required,rules.minPassword]"
-                  :type="show1 ? 'text' : 'password'"
-                  name="input-10-1"
-                  label="Password"
-                  hint="Debe contener minimo 8 caracteres"
-                  counter
-                  @click:append="show1 = !show1"
-                ></v-text-field>
-              </v-col> -->
+             
               <v-col cols="12" sm="6">
-                <v-text-field id="Dni" v-model="User.data().dni" label="DNI*" :rules="[rules.required]" ></v-text-field>
+                <v-text-field id="Dni" v-model="User.dni" label="DNI*" :rules="[rules.required]" ></v-text-field>
               </v-col>
-              <!-- <v-col cols="12" sm="6">
-                <v-select id="TipoUser"
-                v-model="User.data().TipoUser" :items="['Administrador', 'Profesor']" label="Tipo Usuario*" x:rules="[rules.required]"
-                ></v-select>
-              </v-col> -->
+              
 
             </v-row>
           </v-form>
@@ -52,11 +36,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = null">Cerrar</v-btn>      
-          <v-btn color="blue darken-1" text @click="EditUser(User.id)">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="EditUser(id)">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+</v-container>
 </template>
 
 <script>
@@ -64,10 +48,11 @@
 import { db} from '@/components/FirebaseInit'
 
 export default {
-  props:{User: Object},
+  props:['User', 'id'],
   name: "EditUser",
   data() {
     return {
+      control: null,
       dialog: false,
       show1: false,
       rules: {
@@ -77,19 +62,32 @@ export default {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         }
-        // emailMatch: () => ('The email and password you entered don\'t match'),
+        
       }
     };
   },
 
   methods: {
+
+    isAdminF(){        
+      let promesa = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get()     
+      promesa.then(snapshot => {
+      const data = snapshot.data().tipoUsuario;
+      if (data == "Administrativo"){
+        this.control = true;
+      }else {
+        this.control =  false;
+      }
+      })
+    },
+
     EditUser() {
    
       var NombreN = document.getElementById('Nombre').value;
       var ApellidoN = document.getElementById('Apellido').value;
       var EmailN = document.getElementById('Email').value;
       var DniN = document.getElementById('Dni').value;      
-      var UsuariosRef = db.collection("Usuarios").doc(this.User.id);
+      var UsuariosRef = db.collection("Usuarios").doc(this.id);
 
       
       return UsuariosRef.update({

@@ -23,8 +23,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-         
+        <v-spacer></v-spacer>
+          <registroGeneral></registroGeneral>
           <v-btn color="dark" text @click="login">Iniciar</v-btn>
         </v-card-actions>
       </v-card>
@@ -34,8 +34,11 @@
 
 <script>
 
-import {fb} from '@/components/FirebaseInit'
+import {fb} from '@/components/FirebaseInit';
+import RegistroGeneral from "@/components/RegistroGeneral.vue";
   export default {
+    name: 'Login',
+    components: {  RegistroGeneral },
     data: () => ({
       dialog: false,
       loginM: true,
@@ -53,8 +56,7 @@ import {fb} from '@/components/FirebaseInit'
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(
-            currentUser => {
-              
+            (currentUser) => {              
               alert(`Bienvenido`);
               this.isOpen = false;
               this.$router.push("/panel");

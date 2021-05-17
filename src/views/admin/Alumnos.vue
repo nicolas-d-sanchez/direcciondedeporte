@@ -17,10 +17,10 @@
           max-width="300"
         ></v-img>
       </v-flex>
+    </v-layout>
 
-      <v-row>
-       
-      <v-col sm="3" xl="12">
+    <v-row>
+      <v-col sm="3" xl="3">
         <v-text-field
           type="search"
           placefolder="Buscar"
@@ -29,47 +29,75 @@
         >
         </v-text-field>
       </v-col>
-        <RegistroAlumno />
-        
-      </v-row>
+      <v-col>
+        <v-dialog v-model="dialog2" width="600px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn small text  v-bind="attrs" v-on="on">
+              Alta Usuario
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">Registro de Alumno</span>              
+            </v-card-title>
+            <v-divider></v-divider>
+            <RegistroAlumno/>            
+          </v-card>
+        </v-dialog>
+      </v-col>
+    </v-row>
 
-      <v-flex xs12>
-        <v-simple-table height="400px">
-          
-            <thead>
-              <tr>
-                <th class="text-left">Foto</th>
-                <th class="text-left">LU</th>
-                <th class="text-left">DNI</th>
-                <th class="text-left">Nombre</th>
-                <th class="text-left">Apellido</th>
-                <th class="text-left">Email</th>
-                <th class="text-left">Direccion</th>
-                <th class="text-left">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in Filtro" :key="item.id">
-                <img class="preview" :src="item.data().foto" />
-                <td>{{ item.data().lu }}</td>
-                <td>{{ item.data().dni }}</td>
-                <td>{{ item.data().nombre }}</td>
-                <td>{{ item.data().apellido }}</td>
-                <td>{{ item.data().email }}</td>
-                <td>{{ item.data().direccion }}</td>
-                <td>
-                  <EditAlumno :Alumnos="item"></EditAlumno>
-                  <v-btn text small text-center @click="credencial(item)">                    
-                    Generar credencial
+    <v-flex xs12>
+      <v-simple-table height="400px">
+        <thead>
+          <tr>
+            <th class="text-left">Foto</th>
+            <th class="text-left">LU</th>
+            <th class="text-left">DNI</th>
+            <th class="text-left">Nombre</th>
+            <th class="text-left">Apellido</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Direccion</th>
+            <th class="text-left"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in Filtro" :key="item.id">
+            <img class="preview" :src="item.data().foto" />
+            <td>{{ item.data().l }}</td>
+            <td>{{ item.data().dni }}</td>
+            <td>{{ item.data().nombre }}</td>
+            <td>{{ item.data().apellido }}</td>
+            <td>{{ item.data().email }}</td>
+            <td>{{ item.data().direccion }}</td>
+            <td>
+              <v-menu offset-y absolute>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn small text v-bind="attrs" v-on="on">
+                    Acciones
                   </v-btn>
-                </td>
-                 
-              </tr>
-            </tbody>
-          
-        </v-simple-table>
-      </v-flex>
-    </v-layout>
+                </template>
+                <v-list dense>
+                  <v-list-item>
+                    <editAlumno
+                      block
+                      :Alumno="item.data()"
+                      :id="item.id"
+                    ></editAlumno>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-btn text small block @click="credencial(item)"
+                      >Credencial</v-btn
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </td>
+          </tr>
+        </tbody>
+      </v-simple-table>
+    </v-flex>
+
     <v-row justify="center">
       <v-dialog v-model="dialog" max-width="500" max-hight="400">
         <v-card>
@@ -81,7 +109,6 @@
 </template>
 
 <script>
-
 import RegistroAlumno from "@/components/RegistroAlumno";
 import { db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
@@ -93,12 +120,13 @@ export default {
   data() {
     return {
       dialog: false,
+      dialog2: false,
       alumnos: [],
       buscar: "",
       Datos: {
         id: "",
         foto: "",
-        lu: "",
+        l: "",
         nombre: "",
         apellido: "",
         facultad: "",
@@ -108,46 +136,39 @@ export default {
 
   methods: {
     credencial(item) {
-      
-      this.Datos.id = item.id;      
+      this.Datos.id = item.id;
       this.Datos.foto = item.data().foto;
-      this.Datos.lu = item.data().lu;
+      this.Datos.l = item.data().l;
       this.Datos.nombre = item.data().nombre;
       this.Datos.apellido = item.data().apellido;
       this.Datos.facultad = item.data().facultad;
       this.dialog = true;
-      
     },
-
-   
   },
 
   computed: {
     Filtro() {
-      return this.alumnos.filter(alumnos => {
-          return alumnos.data().dni.includes(this.buscar) || 
-          alumnos.data().lu.includes(this.buscar) ||
-          alumnos.data().nombre.includes(this.buscar) || 
-          alumnos.data().apellido.includes(this.buscar) || 
+      return this.alumnos.filter((alumnos) => {
+        return (
+          alumnos.data().dni.includes(this.buscar) ||
+          alumnos.data().nombre.includes(this.buscar) ||
+          alumnos.data().apellido.includes(this.buscar) ||
           alumnos.data().email.includes(this.buscar)
-          ;
-        });
+        );
+      });
     },
   },
 
   mounted() {
-    db.collection("Alumnos")
-      .onSnapshot
-      (querySnapshot => {
-          this.alumnos = [];
-          querySnapshot.forEach(doc => {
-            this.alumnos.push(doc);
-          })
-      })
+    db.collection("Alumnos").onSnapshot((querySnapshot) => {
+      this.alumnos = [];
+      querySnapshot.forEach((doc) => {
+        this.alumnos.push(doc);
+      });
+    });
   },
 };
 </script>
-
 
 <style scoped="">
 img.preview {

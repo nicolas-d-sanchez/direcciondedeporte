@@ -28,6 +28,7 @@
       <v-btn v-if="logueado" to="/panel" text small>Panel</v-btn>
       <v-btn v-if="logueado" @click="CerrarSesion" text small>Cerrar Sesion</v-btn>
       <login v-if="!logueado"></login>
+      
   </v-app-bar>
 
     <v-content>
