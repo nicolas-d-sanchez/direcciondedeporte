@@ -50,14 +50,19 @@ import RegistroGeneral from "@/components/RegistroGeneral.vue";
 
     methods:{
       login() {
-      this.error = "";
+ 
       if (this.email && this.password) {
         fb
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(
-            (currentUser) => {              
-              alert(`Bienvenido`);
+            () => {           
+                this.$fire({
+                title: "Bienvenido",
+                type: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
               this.isOpen = false;
               this.$router.push("/panel");
             },
@@ -65,7 +70,7 @@ import RegistroGeneral from "@/components/RegistroGeneral.vue";
               alert(err.message);
             }
           );
-        //e.preventDefault();
+
       }
     },
     }

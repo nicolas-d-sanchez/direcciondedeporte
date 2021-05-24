@@ -158,6 +158,7 @@ export default {
         estado: false,
         direccion: "",
         legajo:"",
+        foto:"",
       },
     };
   },
@@ -203,10 +204,25 @@ export default {
       return result;
     },
 
-   async addData() {
+   async submit() {
 
     let resultDni = await this.controlDni();
     let resultLe = await this.controlLegajo();
+
+     this.$fire({
+          title: "Estas seguro?",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#007600',
+          confirmButtonText: 'Si, Estoy seguro!',
+          cancelButtonText: "No, Cancelar!"
+        }).then(r => {     
+
+    var foto = this.datosAlumnos.foto;
+        if (foto === "") {
+          this.datosUsuario.foto =
+            "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
+    }
 
     if (resultDni & resultLe){
      fb.auth()
@@ -233,6 +249,7 @@ export default {
       alert('Ya existe un usuario con ese Dni o Legajo');
       }
       this.dialog = false;
+       });  
     },
 
     clear() {

@@ -19,13 +19,13 @@
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+            <v-img :src="this.user.foto"></v-img>
           </v-list-item-avatar>
         </v-list-item>
 
         <v-list-item >
           <v-list-item-content>
-            <v-list-item-title class="title">{{this.user.userEmail}}</v-list-item-title>
+            <v-list-item-title class="title">{{this.user.userName}}</v-list-item-title>
             <v-list-item-subtitle>{{this.user.userEmail}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -81,7 +81,7 @@ export default {
           {
           userEmail:"", 
           userName:"",
-          
+          foto:""
           }         
         ],
       windowSize: {
@@ -100,9 +100,7 @@ export default {
   },
 
   mounted() {
-    this.onResize();
-    this.mostrasUsuario();
-   
+    this.onResize();  
 
   },
 
@@ -117,7 +115,11 @@ export default {
       let promesa = db.collection("Usuarios").doc(fb.auth().currentUser.uid).get()     
       promesa.then(snapshot => {
       const data = snapshot.data().tipoUsuario;
+      this.user.foto = snapshot.data().foto;
+      this.user.userEmail = snapshot.data().email;
+      this.user.userName = snapshot.data().nombre;
       if (data == "Administrativo"){
+        
         this.control = true;
       }else {
         this.control =  false;
@@ -129,13 +131,7 @@ export default {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight };
     },  
 
-    mostrasUsuario(){
-      if (fb.auth().currentUser != null){
-        this.user.userEmail= fb.auth().currentUser.email
-        this.userName= fb.auth().currentUser.email
-      }
-      
-    },
+
 
     CerrarSesion() {
       fb
@@ -143,7 +139,12 @@ export default {
         .signOut()
         .then(()=> {
           // Sign-out successful.
-          alert(`Hasta la proxima`);
+          this.$fire({
+                title: "Hasta la proxima",
+                type: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
           this.$router.push("/");
         })
         .catch(function(error) {

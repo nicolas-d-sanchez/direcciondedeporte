@@ -73,23 +73,31 @@
               <td>{{ item.data().direccion }}</td>
               <td>{{ item.data().tipoUsuario }}</td>
               <td>
-                <EditUser :User="item.data()" :id="item.id"></EditUser>
-                <v-btn
-                  text
-                  small
-                  text-center
-                  v-if="item.data().estado === ''"
-                  @click="AltaUser(item.id)"
-                  >Alta</v-btn
-                >
-                <v-btn
-                  text
-                  small
-                  text-center
-                  v-if="item.data().estado === 'true'"
-                  @click="deleteUser(item.id)"
-                  >Baja</v-btn
-                >
+                
+              <v-menu offset-y absolute>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn small text v-bind="attrs" v-on="on">
+                    Acciones
+                  </v-btn>
+                </template>
+                <v-list dense>
+                  <v-list-item>
+                    <EditUser
+                      block
+                      :User="item.data()"
+                      :id="item.id"
+                    ></EditUser>
+                  </v-list-item>                 
+                  <v-list-item v-if="!item.data().estado">
+                    <v-btn text small block @click="Alta(item)">Alta Usuario</v-btn>
+                  </v-list-item>
+                  <v-list-item v-if="item.data().estado">
+                    <v-btn text small block @click="Baja(item)">Baja Usuario</v-btn>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+
               </td>
             </tr>
           </tbody>
@@ -131,18 +139,55 @@ export default {
         });
     },
 
-    AltaUser(doc) {
-      var UsuariosRef = db.collection("Usuarios").doc(doc);
-      return UsuariosRef.update({
-        Estado: "true",
-      })
-        .then(function() {
-          // window.location.reload();
+    Alta(item) {
+
+      this.$fire({
+        title: "Estas seguro?",
+        type: "question",
+        showCancelButton: true,
+        confirmButtonColor: '#007600',
+        confirmButtonText: 'Si, Estoy seguro!',
+        cancelButtonText: "No, Cancelar!"
+      }).then(r => {          
+           if (r.value == true){
+            var UsuariosRef = db.collection("Usuarios").doc(item.id);
+            return UsuariosRef.update({
+              estado: "true",
+            })
+            .then(function() {
+              // window.location.reload();
+            })
+            .catch(function(error) {
+              console.error("Error Al Modifica Usuario: ", error);
+            }); 
+          }
         })
-        .catch(function(error) {
-          console.error("Error Al Modifica Usuario: ", error);
-        });
     },
+
+    Baja(item) {
+
+      this.$fire({
+        title: "Estas seguro?",
+        type: "question",
+        showCancelButton: true,
+        confirmButtonColor: '#007600',
+        confirmButtonText: 'Si, Estoy seguro!',
+        cancelButtonText: "No, Cancelar!"
+      }).then(r => {          
+           if (r.value == true){
+            var UsuariosRef = db.collection("Usuarios").doc(item.id);
+            return UsuariosRef.update({
+              estado: "false",
+            })
+            .then(function() {
+              // window.location.reload();
+            })
+            .catch(function(error) {
+              console.error("Error Al Modifica Usuario: ", error);
+            }); 
+          }
+        })
+    } 
   },
 
   computed: {

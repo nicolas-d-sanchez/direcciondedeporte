@@ -20,6 +20,8 @@ Vue.use(VueRouter)
         component: () => import('../views/Home.vue')
       },
 
+      
+
       {
         path: '/Panel',
         name: 'Panel',
@@ -28,6 +30,11 @@ Vue.use(VueRouter)
           requiresAuth: true
               },
         children:[
+          {
+            path: '/Panel/Perfil',
+            name: 'Perfil',
+            component: () => import('../views/usuarios/Perfil.vue')
+          },
           {
             path: 'Alumnos',
             name: 'Alumnos',
@@ -42,12 +49,7 @@ Vue.use(VueRouter)
             path: 'Mensajes',
             name: 'Mensajes',
             component: () => import('../views/admin/Mensajes.vue')
-          },
-          {
-            path: 'Perfil',
-            name: 'Perfil',
-            component: () => import('../views/admin/Perfil.vue')
-          },
+          },         
         ]
       },
   

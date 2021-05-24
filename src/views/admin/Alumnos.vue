@@ -33,7 +33,7 @@
         <v-dialog v-model="dialog2" width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn small text  v-bind="attrs" v-on="on">
-              Alta Usuario
+              Alta Alumno
             </v-btn>
           </template>
           <v-card>
@@ -58,6 +58,7 @@
             <th class="text-left">Apellido</th>
             <th class="text-left">Email</th>
             <th class="text-left">Direccion</th>
+            
             <th class="text-left"></th>
           </tr>
         </thead>
@@ -70,6 +71,7 @@
             <td>{{ item.data().apellido }}</td>
             <td>{{ item.data().email }}</td>
             <td>{{ item.data().direccion }}</td>
+            
             <td>
               <v-menu offset-y absolute>
                 <template v-slot:activator="{ on, attrs }">
@@ -86,9 +88,13 @@
                     ></editAlumno>
                   </v-list-item>
                   <v-list-item>
-                    <v-btn text small block @click="credencial(item)"
-                      >Credencial</v-btn
-                    >
+                    <v-btn text small block @click="credencial(item)">Credencial</v-btn>
+                  </v-list-item>
+                  <v-list-item v-if="!item.data().estado">
+                    <v-btn text small block @click="Alta(item)">Alta Alumno</v-btn>
+                  </v-list-item>
+                  <v-list-item v-if="item.data().estado">
+                    <v-btn text small block @click="Baja(item)">Baja Alumno</v-btn>
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -114,6 +120,7 @@ import { db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
 import pdf from "@/components/pdf.vue";
 import EditAlumno from "@/components/EditAlumno.vue";
+
 export default {
   components: { RegistroAlumno, qrcode, EditAlumno, pdf },
 
@@ -130,6 +137,7 @@ export default {
         nombre: "",
         apellido: "",
         facultad: "",
+        estado:""
       },
     };
   },
@@ -144,29 +152,85 @@ export default {
       this.Datos.facultad = item.data().facultad;
       this.dialog = true;
     },
+
+    Alta(item){
+
+       this.$fire({
+          title: "Estas seguro?",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#007600',
+          confirmButtonText: 'Si, Estoy seguro!',
+          cancelButtonText: "No, Cancelar!"
+        }).then(r => {          
+           if (r.value == true){
+            var AlumnosRef = db.collection("Alumnos").doc(item.id);
+            AlumnosRef.update({
+            estado: true,
+            })
+            .then(() => this.$mount((this.dialog = false)))
+            .catch(function(error) {
+            this.$alert("Error Al Modifica Alumnos: ", error);
+            });
+          }
+        });       
+
+    
+    },
+
+    Baja(item){
+          this.$fire({
+          title: "Estas seguro?",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',
+          confirmButtonText: 'Si, Estoy seguro!',
+          cancelButtonText: "No, Cancelar!",
+         
+   
+        }).then(r => {          
+           if (r.value == true){
+             console.log(r);
+              var AlumnosRef = db.collection("Alumnos").doc(item.id);
+            AlumnosRef.update({
+            estado: false,
+            })
+            .then(() => this.$mount((this.dialog = false)))
+            .catch(function(error) {
+            this.$alert("Error Al Modifica Alumnos: ", error);
+            });
+          }
+        });
+      
+    },
+
   },
 
-  computed: {
-    Filtro() {
+    computed: {
+
+    Filtro() {      
       return this.alumnos.filter((alumnos) => {
         return (
           alumnos.data().dni.includes(this.buscar) ||
           alumnos.data().nombre.includes(this.buscar) ||
           alumnos.data().apellido.includes(this.buscar) ||
-          alumnos.data().email.includes(this.buscar)
+          alumnos.data().estado.includes(this.buscar) ||
+          alumnos.data().email.includes(this.buscar) 
         );
       });
     },
+
   },
 
   mounted() {
-    db.collection("Alumnos").onSnapshot((querySnapshot) => {
+    db.collection("Alumnos").onSnapshot((querySnapshot) => {      
       this.alumnos = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((doc) => {      
         this.alumnos.push(doc);
       });
     });
   },
+
 };
 </script>
 

@@ -29,7 +29,7 @@
       <v-btn v-if="logueado" @click="CerrarSesion" text small>Cerrar Sesion</v-btn>
       <login v-if="!logueado"></login>
       
-  </v-app-bar>
+    </v-app-bar>
 
     <v-content>
       <section id="hero">
@@ -397,6 +397,14 @@ export default {
     },
 
     AgregarMensaje() {
+      this.$fire({
+          title: "Estas seguro?",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#007600',
+          confirmButtonText: 'Si, Estoy seguro!',
+          cancelButtonText: "No, Cancelar!"
+        }).then(r => {  
       db.collection("Mensajes").add(
         this.Mensaje
         )
@@ -407,16 +415,22 @@ export default {
         .catch(function(error) {
           console.error("Error writing document: ", error);
         });
+        });
     },
 
-     CerrarSesion() {
+    CerrarSesion() {
       fb
         .auth()
         .signOut()
         .then(()=> {
           // Sign-out successful.
-          alert(`Hasta la proxima`);
-          this.$router.go("/");
+          this.$fire({
+                title: "Hasta la proxima",
+                type: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
+          
         })
         .catch(function(error) {
           // An error happened.

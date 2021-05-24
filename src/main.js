@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import {fb} from '@/components/FirebaseInit'
+import VueSimpleAlert from "vue-simple-alert";
 
+Vue.use(VueSimpleAlert, { reverseButtons: true });
 
 Vue.config.productionTip = false
 

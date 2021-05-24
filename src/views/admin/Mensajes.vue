@@ -12,9 +12,7 @@
       <v-flex>
         <v-img src="@/assets/Teamwork.jpg" max-height="300" max-width="300"></v-img>
       </v-flex>
-    </v-layout>
-
- 
+    </v-layout> 
 
     <v-simple-table dark height="400px">
       <template v-slot:default>

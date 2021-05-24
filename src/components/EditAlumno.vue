@@ -119,7 +119,6 @@ export default {
 
     EditAlumno() {
       if (this.control) {
-        console.log(this.control);
         var luN = document.getElementById("LU").value;
       } else {
         var luN = this.Alumno.l;
@@ -129,9 +128,10 @@ export default {
       var ApellidoN = document.getElementById("Apellido").value;
       var EmailN = document.getElementById("Email").value;
       var DniN = document.getElementById("Dni").value;
+      
       var AlumnosRef = db.collection("Alumnos").doc(this.id);
 
-      return AlumnosRef.update({
+      AlumnosRef.update({
         l: luN,
         nombre: NombreN,
         apellido: ApellidoN,
