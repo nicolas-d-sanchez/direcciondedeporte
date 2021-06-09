@@ -65,7 +65,7 @@
         <v-col cols="12" sm="6" md="6">
           <v-text-field
             type="number"
-            v-model="datosAlumnos.lu"
+            v-model="datosAlumnos.libreta"
             :rules="luRules"
             :counter="5"
             label="Libreta Universitaria"
@@ -82,9 +82,8 @@
             required
           ></v-text-field>
         </v-col>
-      </v-row>    
+      </v-row>
 
-     
       <v-row>
         <v-col cols="12" sm="12" md="12" class="d-flex flex-row-reverse">
           <v-btn class="mr-4" @click="submit">
@@ -148,7 +147,7 @@ export default {
     ],
 
     datosAlumnos: {
-      lu: "",
+      libreta: "",
       dni: "",
       nombre: "",
       apellido: "",
@@ -164,97 +163,98 @@ export default {
     imageData: null,
     picture: "",
     uploadValue: 0,
-
   }),
 
   computed: {},
 
-   
-
   methods: {
-
-    async controlDni(){
-      let result = await db.collection('Alumnos').where("dni", "==",  this.datosAlumnos.dni).get()
-      .then((querySnapshot) => {
-        return querySnapshot.empty;
-      })
-       return result;
+    async controlDni() {
+      let result = await db
+        .collection("Alumnos")
+        .where("dni", "==", this.datosAlumnos.dni)
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.empty;
+        });
+      return result;
     },
 
-    async controlLegajo(){
-      let result = await db.collection('Alumnos').where("legajo", "==",  this.datosAlumnos.lu).get()
-      .then((querySnapshot) => {
-        return querySnapshot.empty;
-      })
+    async controlLibreta() {
+      let result = await db
+        .collection("Alumnos")
+        .where("libreta", "==", this.datosAlumnos.libreta)
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.empty;
+        });
       return result;
     },
 
     async submit() {
       let resultDni = await this.controlDni();
-      let resultLe = await this.controlLegajo();
-       this.$fire({
-          title: "Estas seguro?",
-          type: "question",
-          showCancelButton: true,
-          confirmButtonColor: '#007600',
-          confirmButtonText: 'Si, Estoy seguro!',
-          cancelButtonText: "No, Cancelar!"
-        }).then(r => {     
-      
-    
-      if (this.$refs.form.validate()) {
-        var today = new Date();
-        var date =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        var time =
-          today.getHours() +
-          ":" +
-          today.getMinutes() +
-          ":" +
-          today.getSeconds();
-        var dateTime = date + " " + time;
-        this.datosAlumnos.fechaAlta = dateTime;
-        this.datosAlumnos.foto =  "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
-              
-        if (resultDni & resultLe){
-          fb.auth()
-            .createUserWithEmailAndPassword(
-              this.datosAlumnos.email,
-              this.datosAlumnos.dni
-            )
-            .then((user) => {
-              db.collection("Alumnos")
-                .doc(user.user.uid)
-                .set(this.datosAlumnos)
-                .then(function() {
-                  console.log("Usuario Creado");
-                })
-                .catch(function(error) {
-                  alert ("Error al escribir en la base de datos");
-                })
-                .catch((err) => {
-                  alert ("El email ya existe");
-                });
-          });
-        }else{
-          alert ('Ya existe un alumno registrado con el Dni o Lu');
+      let resultLu = await this.controlLibreta();
+      this.$fire({
+        title: "Estas seguro?",
+        type: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#007600",
+        confirmButtonText: "Si, Estoy seguro!",
+        cancelButtonText: "No, Cancelar!",
+      }).then((r) => {
+        if (this.$refs.form.validate()) {
+          var today = new Date();
+          var date =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1) +
+            "-" +
+            today.getDate();
+          var time =
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds();
+          var dateTime = date + " " + time;
+          this.datosAlumnos.fechaAlta = dateTime;
+          this.datosAlumnos.foto =
+            "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
+
+          if (resultDni & resultLu) {
+            fb.auth()
+              .createUserWithEmailAndPassword(
+                this.datosAlumnos.email,
+                this.datosAlumnos.dni
+              )
+              .then((user) => {
+                db.collection("Alumnos")
+                  .doc(user.user.uid)
+                  .set(this.datosAlumnos)
+                  .then(function() {
+                    console.log("Usuario Creado");
+                  })
+                  .catch(function(error) {
+                    alert("Error al escribir en la base de datos");
+                  })
+                  .catch((err) => {
+                    alert("El email ya existe");
+                  });
+              });
+          } else {
+            alert("Ya existe un alumno registrado con el Dni o Lu");
+          }
         }
-      }
-        });  
+      });
     },
 
-   clear() {      
+    clear() {
       this.datosAlumnos.nombre = "";
       this.datosAlumnos.apellido = "";
       this.datosAlumnos.email = "";
       this.datosAlumnos.selectSexo = null;
       this.datosAlumnos.selectFacultad = null;
       this.datosAlumnos.dni = "";
-      this.datosAlumnos.lu = "";
+      this.datosAlumnos.libreta = "";
     },
   },
 };

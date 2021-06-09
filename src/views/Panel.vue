@@ -118,8 +118,7 @@ export default {
       this.user.foto = snapshot.data().foto;
       this.user.userEmail = snapshot.data().email;
       this.user.userName = snapshot.data().nombre;
-      if (data == "Administrativo"){
-        
+      if (data == "Administrativo"){        
         this.control = true;
       }else {
         this.control =  false;

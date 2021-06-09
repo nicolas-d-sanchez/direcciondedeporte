@@ -40,7 +40,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="6">
+              <!-- <v-col cols="12" sm="6">
                 <v-text-field
                   id="Dni"
                   v-model="Alumno.dni"
@@ -51,12 +51,12 @@
               <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   v-if="control"
-                  id="LU"
+                  id="Libreta"
                   v-model="Alumno.l"
                   label="LU*"
                   :rules="[rules.required]"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-container>
           <small>*Todos los item son requeridos</small>
@@ -102,6 +102,26 @@ export default {
   },
 
   methods: {
+    async controlDni(){
+      let dni = document.getElementById("Dni").value 
+      console.log(dni);
+      let result = await db.collection('Alumnos').where("dni", "==", dni ).get()
+      .then((querySnapshot) => {
+        return querySnapshot.empty;
+      })
+       return result;
+    },
+
+    async controlLibreta(){
+      let libreta = document.getElementById("Libreta").value
+      console.log(libreta);
+      let result = await db.collection('Alumnos').where("libreta", "==",  libreta).get()
+      .then((querySnapshot) => {
+        return querySnapshot.empty;
+      })
+      return result;
+    },
+
     isAdminF() {
       let promesa = db
         .collection("Usuarios")
@@ -118,30 +138,25 @@ export default {
     },
 
     EditAlumno() {
-      if (this.control) {
-        var luN = document.getElementById("LU").value;
-      } else {
-        var luN = this.Alumno.l;
-      }
+     
 
       var NombreN = document.getElementById("Nombre").value;
       var ApellidoN = document.getElementById("Apellido").value;
       var EmailN = document.getElementById("Email").value;
-      var DniN = document.getElementById("Dni").value;
-      
+
       var AlumnosRef = db.collection("Alumnos").doc(this.id);
 
       AlumnosRef.update({
-        l: luN,
         nombre: NombreN,
         apellido: ApellidoN,
         email: EmailN,
-        dni: DniN,
       })
         .then(() => this.$mount((this.dialog = false)))
         .catch(function(error) {
           console.error("Error Al Modifica Alumnos: ", error);
         });
+
+      
     },
   },
 };

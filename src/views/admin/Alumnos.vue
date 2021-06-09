@@ -4,6 +4,8 @@
       <v-flex md6>
         <h1>Gestion De Alumnos</h1>
         <h5>
+
+          {{this.alumnos.libreta}}
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos optio,
           ducimus, perspiciatis corrupti ipsa dolor labore ad deleniti rerum
           omnis, ullam cum laboriosam nulla ipsum sunt vero enim beatae ipsam!
@@ -52,7 +54,7 @@
         <thead>
           <tr>
             <th class="text-left">Foto</th>
-            <th class="text-left">LU</th>
+            <th class="text-left">Libreta</th>
             <th class="text-left">DNI</th>
             <th class="text-left">Nombre</th>
             <th class="text-left">Apellido</th>
@@ -65,7 +67,7 @@
         <tbody>
           <tr v-for="item in Filtro" :key="item.id">
             <img class="preview" :src="item.data().foto" />
-            <td>{{ item.data().l }}</td>
+            <td>{{ item.data().libreta }}</td>
             <td>{{ item.data().dni }}</td>
             <td>{{ item.data().nombre }}</td>
             <td>{{ item.data().apellido }}</td>
@@ -133,7 +135,7 @@ export default {
       Datos: {
         id: "",
         foto: "",
-        l: "",
+        libreta: "",
         nombre: "",
         apellido: "",
         facultad: "",
@@ -143,10 +145,21 @@ export default {
   },
 
   methods: {
+    async leer(){
+     let ref =  await db.collection("Alumnos")
+
+     ref.onSnapshot((querySnapshot) => {      
+      this.alumnos = [];
+      querySnapshot.forEach((doc) => {      
+        this.alumnos.push(doc);
+      });
+    });
+    },
+    
     credencial(item) {
       this.Datos.id = item.id;
       this.Datos.foto = item.data().foto;
-      this.Datos.l = item.data().l;
+      this.Datos.libreta = item.data().libreta;
       this.Datos.nombre = item.data().nombre;
       this.Datos.apellido = item.data().apellido;
       this.Datos.facultad = item.data().facultad;
@@ -208,13 +221,12 @@ export default {
 
     computed: {
 
-    Filtro() {      
+    Filtro() {
       return this.alumnos.filter((alumnos) => {
-        return (
+        return (           
           alumnos.data().dni.includes(this.buscar) ||
           alumnos.data().nombre.includes(this.buscar) ||
           alumnos.data().apellido.includes(this.buscar) ||
-          alumnos.data().estado.includes(this.buscar) ||
           alumnos.data().email.includes(this.buscar) 
         );
       });
@@ -223,12 +235,7 @@ export default {
   },
 
   mounted() {
-    db.collection("Alumnos").onSnapshot((querySnapshot) => {      
-      this.alumnos = [];
-      querySnapshot.forEach((doc) => {      
-        this.alumnos.push(doc);
-      });
-    });
+    this.leer();
   },
 
 };
