@@ -26,9 +26,6 @@ Vue.use(VueRouter)
         path: '/Panel',
         name: 'Panel',
         component: () => import('../views/Panel.vue'),
-        meta: {
-          requiresAuth: true
-              },
         children:[
           {
             path: '/Panel/Perfil',
@@ -38,17 +35,25 @@ Vue.use(VueRouter)
           {
             path: 'Alumnos',
             name: 'Alumnos',
-            component: () => import('../views/admin/Alumnos.vue')
+            component: () => import('../views/admin/Alumnos.vue'),
+            meta: {
+              requiresAuth: true
+                  },
           },
           {
             path: 'Usuarios',
             name: 'Usuarios',
-            component: () => import('../views/admin/Usuarios.vue')
+            component: () => import('../views/admin/Usuarios.vue'),meta: {
+              requiresAuth: true
+                  },
           },
           {
             path: 'Mensajes',
             name: 'Mensajes',
-            component: () => import('../views/admin/Mensajes.vue')
+            component: () => import('../views/admin/Mensajes.vue'),
+            meta: {
+              requiresAuth: true
+                  },
           },         
         ]
       },
@@ -60,13 +65,20 @@ Vue.use(VueRouter)
 
 export default Router;
 
-Router.beforeEach((to, from, next)=> {
-  let usuario = firebase.auth().currentUser;
-  let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (requiresAuth && !usuario) {
-    alert('Debe estar registrado para acceder a esta seccion');
-    next('Home')
-  } else {
-    next()
-  }
+function user(){
+
+}
+
+
+Router.beforeEach/((to, from, next)=> {  
+  let usuario = firebase.auth().currentUser.uid;
+  var docRef = db.collection("Admins").doc(usuario);
+  docRef.get().then((doc) => {
+    if (doc.exists) {
+      next()       
+    } else {
+      alert('Debe estar registrado para acceder a esta seccion');
+      next('Home')
+    }
+  })
 })

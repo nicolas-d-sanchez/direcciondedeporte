@@ -53,6 +53,7 @@
       <v-simple-table height="400px">
         <thead>
           <tr>
+            <th class="text-left">Estado</th>
             <th class="text-left">Foto</th>
             <th class="text-left">Libreta</th>
             <th class="text-left">DNI</th>
@@ -66,6 +67,9 @@
         </thead>
         <tbody>
           <tr v-for="item in Filtro" :key="item.id">
+            <td>
+                  <v-icon :color="(item.data().estado) ? 'green' : 'red'">mdi-circle</v-icon>
+              </td>
             <img class="preview" :src="item.data().foto" />
             <td>{{ item.data().libreta }}</td>
             <td>{{ item.data().dni }}</td>

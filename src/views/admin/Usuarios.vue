@@ -51,6 +51,7 @@
         <template v-slot:default>
           <thead>
             <tr>
+              <th class="text-left">Estado</th>
               <th class="text-left">Foto</th>
               <th class="text-left">Legajo</th>
               <th class="text-left">DNI</th>
@@ -64,7 +65,10 @@
           </thead>
           <tbody>
             <tr v-for="item in Filtro" :key="item.id">
-              <img class="preview" :src="item.data().foto" />
+              <td>
+                  <v-icon :color="(item.data().estado) ? 'green' : 'red'">mdi-circle</v-icon>
+              </td>
+              <img class="preview" :src="item.data().foto" />           
               <td>{{ item.data().legajo }}</td>
               <td>{{ item.data().dni }}</td>
               <td>{{ item.data().nombre }}</td>
