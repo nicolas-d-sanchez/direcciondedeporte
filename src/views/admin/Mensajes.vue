@@ -14,7 +14,7 @@
       </v-flex>
     </v-layout> 
 
-    <v-simple-table dark height="400px">
+    <v-simple-table  height="400px">
       <template v-slot:default>
         <thead>
           <tr>

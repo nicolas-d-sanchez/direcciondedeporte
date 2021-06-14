@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import firebase from "firebase";
+import { fb, db } from "@/components/FirebaseInit";
 
 Vue.use(VueRouter)
 
@@ -43,7 +44,8 @@ Vue.use(VueRouter)
           {
             path: 'Usuarios',
             name: 'Usuarios',
-            component: () => import('../views/admin/Usuarios.vue'),meta: {
+            component: () => import('../views/admin/Usuarios.vue'),
+            meta: {
               requiresAuth: true
                   },
           },
@@ -54,7 +56,17 @@ Vue.use(VueRouter)
             meta: {
               requiresAuth: true
                   },
-          },         
+          },     
+          {
+            path: 'Reportes',
+            name: 'Reportes',
+            component: () => import('../views/admin/Reportes.vue'),
+            meta: {
+              requiresAuth: true
+                  },
+          },
+            
+            
         ]
       },
   
@@ -65,20 +77,37 @@ Vue.use(VueRouter)
 
 export default Router;
 
-function user(){
-
-}
 
 
-Router.beforeEach/((to, from, next)=> {  
-  let usuario = firebase.auth().currentUser.uid;
-  var docRef = db.collection("Admins").doc(usuario);
-  docRef.get().then((doc) => {
-    if (doc.exists) {
-      next()       
-    } else {
-      alert('Debe estar registrado para acceder a esta seccion');
-      next('Home')
-    }
-  })
+// Router.beforeEach/((to, next)=> {  
+//    let usuario = firebase.auth().currentUser.uid;
+//   const requiresAuth = to.matched.some(record  => record.meta.requiresAuth)
+
+//   db.collection("Admins").doc(usuario).get().then((doc) => {
+//     if (!doc.exists & requiresAuth) {
+//       alert('Debe estar registrado para acceder a esta seccion');
+//       next('/Home')       
+//     } else {
+      
+//       next('/Panel')
+//     }
+//   })
+// })
+
+Router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    db.collection("Admins").doc(fb.auth().currentUser.uid).get().then((doc) => {
+          if (!doc.exists) {
+            alert('No tiene suficientes privilegios');
+            next({
+              path: '/login',
+              query: {
+                redirect: to.fullPath,
+              },
+            })
+      }else{ next()}
+    })
+  } else {
+    next();
+  }
 })

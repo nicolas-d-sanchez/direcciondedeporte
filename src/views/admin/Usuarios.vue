@@ -119,7 +119,7 @@
 <script>
 import RegistroUser from "@/components/RegistroUser.vue";
 import EditUser from "@/components/EditUser.vue";
-import { db } from "@/components/FirebaseInit.js";
+import { db, fb } from "@/components/FirebaseInit.js";
 
 export default {
   name: "Usuarios",
@@ -159,13 +159,12 @@ export default {
         cancelButtonText: "No, Cancelar!"
       }).then(r => {          
            if (r.value == true){
-            var UsuariosRef = db.collection("Usuarios").doc(item.id);
-
+       
              db.collection("Admins").doc(item.id).set({
                 name: item.data().nombre,
               }).then(
                 function() {
-                   UsuariosRef.update({
+                  db.collection("Usuarios").doc(item.id).update({
                     estado: true,
                     tipoUsuario: "Administrativo",
                   })
@@ -188,17 +187,16 @@ export default {
         cancelButtonText: "No, Cancelar!"
       }).then(r => {          
            if (r.value == true){
-            var UsuariosRef = db.collection("Usuarios").doc(item.id);
-
+       
             db.collection("Admins").doc(item.id).delete()
               .then(function() {
-              UsuariosRef.update({
+              db.collection("Usuarios").doc(item.id).update({
               estado: false,
               tipoUsuario: "Sin Definir",
             })
             })       
             .catch(function(error) {
-              alert("Error al dar de baja Administrativo: ", error);
+              alert(error);
             }); 
           }
         })
@@ -214,6 +212,7 @@ export default {
         cancelButtonText: "No, Cancelar!"
       }).then(r => {          
            if (r.value == true){
+             console.log(fb.auth().currentUser.uid);
             var UsuariosRef = db.collection("Usuarios").doc(item.id);
 
              db.collection("Profesores").doc(item.id).set({
@@ -263,7 +262,8 @@ export default {
   computed: {
     Filtro() {
       return this.usuarios.filter((usuarios) => {
-        return (       
+        return (   
+          usuarios.data().legajo.includes(this.buscar) ||    
           usuarios.data().dni.includes(this.buscar) ||
           usuarios.data().nombre.includes(this.buscar) ||
           usuarios.data().apellido.includes(this.buscar) || 

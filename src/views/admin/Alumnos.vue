@@ -4,8 +4,6 @@
       <v-flex md6>
         <h1>Gestion De Alumnos</h1>
         <h5>
-
-          {{this.alumnos.libreta}}
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos optio,
           ducimus, perspiciatis corrupti ipsa dolor labore ad deleniti rerum
           omnis, ullam cum laboriosam nulla ipsum sunt vero enim beatae ipsam!
@@ -30,6 +28,7 @@
           label="Buscar"
         >
         </v-text-field>
+         <v-btn text small block @click="Contar(facu)">Baja Alumno</v-btn>
       </v-col>
       <v-col>
         <v-dialog v-model="dialog2" width="600px">
@@ -43,7 +42,7 @@
               <span class="headline">Registro de Alumno</span>              
             </v-card-title>
             <v-divider></v-divider>
-            <RegistroAlumno/>            
+            <RegistroAlumno/>           
           </v-card>
         </v-dialog>
       </v-col>
@@ -77,7 +76,6 @@
             <td>{{ item.data().apellido }}</td>
             <td>{{ item.data().email }}</td>
             <td>{{ item.data().direccion }}</td>
-            
             <td>
               <v-menu offset-y absolute>
                 <template v-slot:activator="{ on, attrs }">
@@ -134,7 +132,7 @@ export default {
     return {
       dialog: false,
       dialog2: false,
-      alumnos: [],
+      alumnos: [],facu: [],
       buscar: "",
       Datos: {
         id: "",
@@ -151,11 +149,11 @@ export default {
   methods: {
     async leer(){
      let ref =  await db.collection("Alumnos")
-
      ref.onSnapshot((querySnapshot) => {      
       this.alumnos = [];
       querySnapshot.forEach((doc) => {      
         this.alumnos.push(doc);
+        this.facu.push(doc.data().facultad);
       });
     });
     },
@@ -221,13 +219,27 @@ export default {
       
     },
 
+    Contar(datosAlumno){
+      console.log(datosAlumno);
+      if(!Array.isArray(datosAlumno)){
+        throw TypeError('el argumento no es un array')
+      }
+       let result = datosAlumno.reduce((a, d) => (a [d] ? a[d] +=1 : a[d] = 1 , a), {});
+       console.log(result);
+    },
+
+    activos(){
+      this.buscar = true
+    }
+
   },
 
     computed: {
 
     Filtro() {
       return this.alumnos.filter((alumnos) => {
-        return (           
+        return (
+          alumnos.data().libreta.includes(this.buscar) ||         
           alumnos.data().dni.includes(this.buscar) ||
           alumnos.data().nombre.includes(this.buscar) ||
           alumnos.data().apellido.includes(this.buscar) ||

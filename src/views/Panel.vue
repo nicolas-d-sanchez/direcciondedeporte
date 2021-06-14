@@ -126,6 +126,12 @@ export default {
           icon: "mdi-message",
           link: "/Panel/Mensajes",
         },
+
+        {
+          text: "Panel Reportes",
+          icon: "mdi-domain",
+          link: "/Panel/Reportes",
+        },
       ],
     };
   },
@@ -135,11 +141,12 @@ export default {
   },
 
   created() {
-    this.isAdminF();
+    this.User();
+    this.admin();
   },
 
   methods: {
-    isAdminF() {
+    User() {
       let usuario = fb.auth().currentUser.uid;
       let docRef = db.collection("Usuarios").doc(usuario);
       docRef.get().then((doc) => {
@@ -148,7 +155,7 @@ export default {
           this.user.foto = doc.data().foto;
           this.user.userEmail = doc.data().email;
           this.user.userName = doc.data().nombre;
-          this.control = true;
+      
         } else {
           db.collection("Alumnos")
             .doc(usuario)
@@ -163,6 +170,15 @@ export default {
             });
         }
       });
+    },
+
+    admin(){
+          let usuario = fb.auth().currentUser.uid;
+          db.collection("Admins").doc(usuario).get().then((doc) => {
+            if (doc.exists) {
+              this.control = true;  
+            } 
+          })
     },
 
     onResize() {

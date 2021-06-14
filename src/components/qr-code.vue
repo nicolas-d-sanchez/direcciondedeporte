@@ -1,5 +1,8 @@
 <template>
   <v-container>
+   
+
+  
     <vue-html2pdf
       :show-layout="false"
       :float-layout="false"
@@ -8,12 +11,14 @@
       :paginate-elements-by-height="1400"
       :pdf-quality="2"
       :manual-pagination="false"
-      pdf-format="a4"
-      :filename="Datos.lu"
+      
+      :filename="Datos.libreta + Datos.nombre + Datos.apellido "
       pdf-orientation="portrait"
       ref="html2Pdf"
     >
+
       <section slot="pdf-content">
+    
         <v-container id="credencialgen">
           <h1>Credencial Alumno</h1>
           <v-row no-gutters>
@@ -30,7 +35,7 @@
             </v-col>
           </v-row>
           <ul id="datosS" style="font-family: 'Source Sans Pro'; font-size: 10px">
-            <ul>LU: {{ Datos.lu }}
+            <ul>LU: {{ Datos.libreta }}
             </ul>
             <ul>Nombre: {{ Datos.nombre }}
             </ul>
@@ -40,8 +45,12 @@
             </ul>
           </ul>
         </v-container>
+            
       </section>
+    
+
     </vue-html2pdf>
+    
     <v-spacer></v-spacer>
     <v-btn text @click="generateReport">Descargar</v-btn>
   </v-container>
@@ -74,6 +83,8 @@ export default {
   methods: {
     
     generateReport() {     
+
+
       this.$refs.html2Pdf.generatePdf();
      
     },
