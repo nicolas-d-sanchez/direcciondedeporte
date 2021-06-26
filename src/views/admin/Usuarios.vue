@@ -28,7 +28,8 @@
             label="Buscar"
           >
           </v-text-field>
-        </v-col> <v-col>
+        </v-col> 
+        <!-- <v-col>
         <v-dialog v-model="dialog" width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn small text  v-bind="attrs" v-on="on">
@@ -44,7 +45,7 @@
             <RegistroUser/>            
           </v-card>
         </v-dialog>
-      </v-col>
+      </v-col> -->
       </v-row>
 
       <v-simple-table height="400px">
@@ -87,7 +88,6 @@
                 <v-list dense>
                   <v-list-item>
                     <EditUser
-                      block
                       :User="item.data()"
                       :id="item.id"
                     ></EditUser>
@@ -170,7 +170,7 @@ export default {
                   })
                 }
             ).catch(function(error) {
-              alert("Error en el alta de Administrativo: ", error);
+              this.$alert("Error en el alta de Administrativo: ", error);
             }); 
             
           }
@@ -186,8 +186,7 @@ export default {
         confirmButtonText: 'Si, Estoy seguro!',
         cancelButtonText: "No, Cancelar!"
       }).then(r => {          
-           if (r.value == true){
-       
+           if (r.value == true){       
             db.collection("Admins").doc(item.id).delete()
               .then(function() {
               db.collection("Usuarios").doc(item.id).update({
@@ -196,7 +195,7 @@ export default {
             })
             })       
             .catch(function(error) {
-              alert(error);
+              this.$alert('Error en la baja, no posee suficientes privilegios');
             }); 
           }
         })

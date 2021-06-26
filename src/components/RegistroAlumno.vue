@@ -1,12 +1,12 @@
 <template>
   <v-form class="formulario" ref="form" lazy-validation>
-    <v-container>
+    <v-container >
       <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
             v-model="datosAlumnos.nombre"
             :rules="textRules"
-            :counter="10"
+            :counter="20"
             label="Nombre"
             required
           ></v-text-field>
@@ -83,7 +83,36 @@
           ></v-text-field>
         </v-col>
       </v-row>
-
+      <v-row>
+        <v-col>
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="date"
+                label="Fecha de Nacimiento"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="date"
+              color="grey"
+              :active-picker.sync="activePicker"
+              min="1950-01-01"
+              @change="save"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col cols="12" sm="12" md="12" class="d-flex flex-row-reverse">
           <v-btn class="mr-4" @click="submit">
@@ -99,7 +128,8 @@
 </template>
 
 <script>
-import { fb, db } from "@/components/FirebaseInit";
+import { fb, db, timeF } from "@/components/FirebaseInit";
+
 export default {
   props: {},
   data: () => ({
@@ -116,8 +146,8 @@ export default {
     textRules: [
       (v) => !!v || "El nombre es requerido",
       (v) =>
-        (v && v.length <= 15 && /^[A-Z]+$/i.test(v)) ||
-        "El nombre debe tener menos de 15 caracteres",
+      (v && v.length <= 20 && /^[A-Za-z\s]+$/i.test(v)) ||
+        "El nombre debe tener menos de 20 caracteres",
     ],
     direccionRules: [
       (v) => !!v || "El nombre es requerido",
@@ -128,7 +158,9 @@ export default {
       (v) => !!v || "E-mail es requerido",
       (v) => /.+@.+\..+/.test(v) || "E-mail debe ser valido",
     ],
-
+    activePicker: null,
+    date: null,
+    menu: false,
     dialog: false,
     sexo: ["Masculino", "Femenino"],
     facultad: [
@@ -156,9 +188,9 @@ export default {
       sexo: null,
       facultad: null,
       estado: false,
-      fechaAlta: "",
       foto: "",
       tipoUsuario: "Alumno",
+      fechaNac: '',
     },
     imageData: null,
     picture: "",
@@ -168,6 +200,13 @@ export default {
   computed: {},
 
   methods: {
+    save(date) {
+      this.$refs.menu.save(date);
+      console.log(date);
+      this.datosAlumnos.fechaNac = timeF.fromDate(new Date(date))
+      console.log(this.datosAlumnos.fechaNac);
+    },
+
     async controlDni() {
       let result = await db
         .collection("Alumnos")
@@ -191,6 +230,7 @@ export default {
     },
 
     async submit() {
+      if (this.$refs.form.validate()) {
       let resultDni = await this.controlDni();
       let resultLu = await this.controlLibreta();
       this.$fire({
@@ -201,22 +241,7 @@ export default {
         confirmButtonText: "Si, Estoy seguro!",
         cancelButtonText: "No, Cancelar!",
       }).then((r) => {
-        if (this.$refs.form.validate()) {
-          var today = new Date();
-          var date =
-            today.getFullYear() +
-            "-" +
-            (today.getMonth() + 1) +
-            "-" +
-            today.getDate();
-          var time =
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds();
-          var dateTime = date + " " + time;
-          this.datosAlumnos.fechaAlta = dateTime;
+       
           this.datosAlumnos.foto =
             "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
 
@@ -243,8 +268,9 @@ export default {
           } else {
             alert("Ya existe un alumno registrado con el Dni o Lu");
           }
-        }
+        
       });
+       }
     },
 
     clear() {
@@ -263,5 +289,6 @@ export default {
 <style scoped>
 .formulario {
   background-color: rgba(255, 255, 255, 0.973);
+  width:680px 
 }
 </style>

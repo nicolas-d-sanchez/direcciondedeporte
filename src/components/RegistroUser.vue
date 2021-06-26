@@ -6,7 +6,7 @@
           <v-text-field
             v-model="datosUsuario.nombre"
             :rules="textRules"
-            :counter="10"
+            :counter="20"
             label="Nombre"
             required
           ></v-text-field>
@@ -83,21 +83,11 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-checkbox
-            v-model="checkbox"
-            :rules="[(v) => !!v || 'Debe tildar para continuar']"
-            label="Esta seguro?"
-            required
-          ></v-checkbox>
-        </v-col>
-      </v-row>
-      <v-row>
         <v-col cols="12" sm="12" md="12" class="d-flex flex-row-reverse">
-          <v-btn class="mr-4" @click="addData">
+          <v-btn class="mr-4"  @click="submit()">
             Agregar
           </v-btn>
-          <v-btn class="mr-4" @click="clear">
+          <v-btn class="mr-4" @click="clear()">
             Limpiar
           </v-btn>
         </v-col>
@@ -129,8 +119,8 @@ export default {
       textRules: [
         (v) => !!v || "El nombre es requerido",
         (v) =>
-          (v && v.length <= 15 && /^[A-Z]+$/i.test(v)) ||
-          "El nombre debe tener menos de 15 caracteres",
+          (v && v.length <= 20 && /^[A-Za-z\s]+$/i.test(v)) ||
+          "El nombre debe tener menos de 20 caracteres",
       ],
       direccionRules: [
         (v) => !!v || "La direccion es requerida",
@@ -143,7 +133,7 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "E-mail debe ser valido",
       ],
       control: "",
-      control2:"",
+      control2: "",
       dialog: false,
       show1: false,
       tipoUsuario: ["Administrativo", "Profesor"],
@@ -157,8 +147,8 @@ export default {
         tipoUsuario: "",
         estado: false,
         direccion: "",
-        legajo:"",
-        foto:"",
+        legajo: "",
+        foto: "",
       },
     };
   },
@@ -188,68 +178,80 @@ export default {
       }
     },
 
-    async controlDni(){
-      let result = await db.collection('Usuarios').where("dni", "==",  this.datosUsuario.dni).get()
-      .then((querySnapshot) => {
-        return querySnapshot.empty;
-      })
-       return result;
-    },
-
-    async controlLegajo(){
-      let result = await db.collection('Usuarios').where("legajo", "==",  this.datosUsuario.legajo).get()
-      .then((querySnapshot) => {
-        return querySnapshot.empty;
-      })
+    async controlDni() {
+      let result = await db
+        .collection("Usuarios")
+        .where("dni", "==", this.datosUsuario.dni)
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.empty;
+        });
       return result;
     },
 
-   async submit() {
+    async controlLegajo() {
+      let result = await db
+        .collection("Usuarios")
+        .where("legajo", "==", this.datosUsuario.legajo)
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.empty;
+        });
+      return result;
+    },
 
-    let resultDni = await this.controlDni();
-    let resultLe = await this.controlLegajo();
+    async submit() {
+      if (this.$refs.form.validate()) {
+        let resultDni = await this.controlDni();
+        let resultLe = await this.controlLegajo();
 
-     this.$fire({
-          title: "Estas seguro?",
-          type: "question",
-          showCancelButton: true,
-          confirmButtonColor: '#007600',
-          confirmButtonText: 'Si, Estoy seguro!',
-          cancelButtonText: "No, Cancelar!"
-        }).then(r => {     
+            this.$fire({
+              title: "Estas seguro?",
+              type: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#007600",
+              confirmButtonText: "Si, Estoy seguro!",
+              cancelButtonText: "No, Cancelar!",
+            }).then((r) => {
+              
+              if (r.value){
+                    var foto = this.datosUsuario.foto;
+              if (foto === "") {
+                this.datosUsuario.foto =
+                  "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
+              }
 
-    var foto = this.datosAlumnos.foto;
-        if (foto === "") {
-          this.datosUsuario.foto =
-            "https://firebasestorage.googleapis.com/v0/b/dirdeporteunne.appspot.com/o/Fotos%2Fjacinto.jpeg?alt=media&token=8239be36-5ede-41ba-b150-3db84c052948";
-    }
-
-    if (resultDni & resultLe){
-     fb.auth()
-          .createUserWithEmailAndPassword(
-            this.datosUsuario.email,
-            this.datosUsuario.password
-          )
-          .then((user) => {
-            db.collection("Usuarios")
-              .doc(user.user.uid)
-              .set(this.datosUsuario)
-              .then(function() {
-                alert("Usuario Creado");
-              })
-              .catch(function(error) {
-                console.error("Error writing document: ", error);
-              });
-          })
-          .catch((err) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-        })
-      }else {
-      alert('Ya existe un usuario con ese Dni o Legajo');
+              if (resultDni & resultLe) {
+                fb.auth()
+                  .createUserWithEmailAndPassword(
+                    this.datosUsuario.email,
+                    this.datosUsuario.password
+                  )
+                  .then((user) => {
+                    db.collection("Usuarios")
+                      .doc(user.user.uid)
+                      .set(this.datosUsuario)
+                      .then(function() {
+                        alert("Usuario Creado");
+                      })
+                      .catch(function(error) {
+                        console.error("Error writing document: ", error);
+                      });
+                  })
+                  .catch((err) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                  });
+              } else {
+                alert("Ya existe un usuario con ese Dni o Legajo");
+              }
+                this.dialog = false;
+              
+              
+              }
+              
+            });   
       }
-      this.dialog = false;
-       });  
     },
 
     clear() {
@@ -268,5 +270,6 @@ export default {
 <style scoped>
 .formulario {
   background-color: rgb(255, 255, 255);
+  width:680px
 }
 </style>

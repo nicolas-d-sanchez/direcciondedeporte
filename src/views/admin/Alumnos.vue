@@ -27,11 +27,11 @@
           v-model="buscar"
           label="Buscar"
         >
-        </v-text-field>
-         <v-btn text small block @click="Contar(facu)">Baja Alumno</v-btn>
+        </v-text-field>      
       </v-col>
-      <v-col>
-        <v-dialog v-model="dialog2" width="600px">
+      <v-col sm="1" xl="1">
+        <v-btn color="grey lighten-5" small block @click="exportExcel()">Exportar a Excel</v-btn>
+        <!-- <v-dialog v-model="dialog2" width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn small text  v-bind="attrs" v-on="on">
               Alta Alumno
@@ -44,7 +44,7 @@
             <v-divider></v-divider>
             <RegistroAlumno/>           
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
       </v-col>
     </v-row>
 
@@ -59,7 +59,8 @@
             <th class="text-left">Nombre</th>
             <th class="text-left">Apellido</th>
             <th class="text-left">Email</th>
-            <th class="text-left">Direccion</th>
+            <th class="text-left">Facultad</th>
+            <th class="text-left">Turno</th>
             
             <th class="text-left"></th>
           </tr>
@@ -75,7 +76,8 @@
             <td>{{ item.data().nombre }}</td>
             <td>{{ item.data().apellido }}</td>
             <td>{{ item.data().email }}</td>
-            <td>{{ item.data().direccion }}</td>
+            <td>{{ item.data().facultad }}</td>
+            <td>{{ item.data().turno }}</td>
             <td>
               <v-menu offset-y absolute>
                 <template v-slot:activator="{ on, attrs }">
@@ -100,6 +102,9 @@
                   <v-list-item v-if="item.data().estado">
                     <v-btn text small block @click="Baja(item)">Baja Alumno</v-btn>
                   </v-list-item>
+                  <v-list-item >
+                    <turno :item="item"></turno>
+                  </v-list-item>
                 </v-list>
               </v-menu>
             </td>
@@ -119,14 +124,19 @@
 </template>
 
 <script>
+
+import XLSX from 'xlsx'
 import RegistroAlumno from "@/components/RegistroAlumno";
-import { db } from "@/components/FirebaseInit.js";
+import { fb, db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
 import pdf from "@/components/pdf.vue";
 import EditAlumno from "@/components/EditAlumno.vue";
+import Turno from "@/components/Turno";
+
+
 
 export default {
-  components: { RegistroAlumno, qrcode, EditAlumno, pdf },
+  components: { RegistroAlumno, qrcode, EditAlumno, pdf ,Turno },
 
   data() {
     return {
@@ -151,13 +161,53 @@ export default {
      let ref =  await db.collection("Alumnos")
      ref.onSnapshot((querySnapshot) => {      
       this.alumnos = [];
-      querySnapshot.forEach((doc) => {      
-        this.alumnos.push(doc);
-        this.facu.push(doc.data().facultad);
-      });
-    });
-    },
+      querySnapshot.forEach((doc) => {        
     
+        this.alumnos.push(doc)
+        this.facu.push(doc.data().facultad)
+            
+      });
+    })
+    },
+
+    
+    exportExcel() {
+            let tableData = [
+                ['Libreta', 'DNI', 'Nombre', 'Apellido','Email','Direccion', 'Genero', 'Facultad', 'Turno', 'Estado']
+            ] 
+            this.alumnos.forEach (item => {
+                let rowData = []
+                let estado = ''
+                if (item.data().estado){
+                  estado = 'Activo'
+                }else estado = 'No Activo'
+
+
+                rowData = [
+                    item.data().libreta,
+                    item.data().dni,
+                    item.data().nombre,
+                    item.data().apellido,
+                    item.data().email,
+                    item.data().direccion,
+                    item.data().sexo,
+                    item.data().facultad,
+                    item.data().turno,
+                    estado
+                ]
+                tableData.push(rowData)
+            })
+            let date = new Date()
+            let day = date.getDate()
+            let month = date.getMonth() + 1
+            let year = date.getFullYear()
+
+            let ws = XLSX.utils.aoa_to_sheet(tableData)
+            let wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, ws, 'data') // Workbook name
+            XLSX.writeFile(wb, 'DatosAlumnos-'+ day + '-' + month + '-' + year + '.xlsx') // Saved file name
+    },
+
     credencial(item) {
       this.Datos.id = item.id;
       this.Datos.foto = item.data().foto;
@@ -165,10 +215,13 @@ export default {
       this.Datos.nombre = item.data().nombre;
       this.Datos.apellido = item.data().apellido;
       this.Datos.facultad = item.data().facultad;
+      this.Datos.turno = item.data().turno;
       this.dialog = true;
     },
 
-    Alta(item){
+    Alta(item){     
+       
+      var today = fb.serverTimestamp
 
        this.$fire({
           title: "Estas seguro?",
@@ -179,14 +232,19 @@ export default {
           cancelButtonText: "No, Cancelar!"
         }).then(r => {          
            if (r.value == true){
-            var AlumnosRef = db.collection("Alumnos").doc(item.id);
-            AlumnosRef.update({
-            estado: true,
-            })
-            .then(() => this.$mount((this.dialog = false)))
-            .catch(function(error) {
-            this.$alert("Error Al Modifica Alumnos: ", error);
-            });
+            if (item.data().turno == null){
+                this.$alert("debe asignar un turno primero")
+            }else{
+                var AlumnosRef = db.collection("Alumnos").doc(item.id);
+              AlumnosRef.update({
+              estado: true,
+              fechaAlta: today
+              })
+              .then(() => this.$mount((this.dialog = false)))
+              .catch(function(error) {
+              this.$alert("Error Al Modifica Alumnos: ", error);
+              });
+            }
           }
         });       
 
@@ -200,12 +258,11 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#DD6B55',
           confirmButtonText: 'Si, Estoy seguro!',
-          cancelButtonText: "No, Cancelar!",
-         
+          cancelButtonText: "No, Cancelar!",        
    
         }).then(r => {          
            if (r.value == true){
-             console.log(r);
+             
               var AlumnosRef = db.collection("Alumnos").doc(item.id);
             AlumnosRef.update({
             estado: false,
@@ -218,6 +275,8 @@ export default {
         });
       
     },
+
+       
 
     Contar(datosAlumno){
       console.log(datosAlumno);

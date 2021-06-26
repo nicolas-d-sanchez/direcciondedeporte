@@ -2,7 +2,7 @@
     <v-container>
     <v-dialog v-model="dialog"  max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn text small v-on="on">Editar</v-btn>
+        <v-btn block text small v-on="on">Editar</v-btn>
       </template>
       <v-card>
         
@@ -54,7 +54,7 @@ export default {
     return {
       control: null,
       dialog: false,
-      show1: false,
+     
       rules: {
         required: value => !!value || "Required.",
         minPassword: v => v.length >= 8 || "Min 8 characters",

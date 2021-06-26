@@ -2,7 +2,7 @@
   require("firebase/firestore");
   import firebase from 'firebase/app'
 
- 
+  
 
 
   var firebaseConfig = {
@@ -16,5 +16,11 @@
 };
 
 const fb = firebase.initializeApp(firebaseConfig);
+fb.serverTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+const timeF = firebase.firestore.Timestamp;
 const db = firebase.firestore();
-export {db,fb}
+export {db,fb,timeF }
+
+
+
+
