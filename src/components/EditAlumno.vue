@@ -237,7 +237,7 @@ export default {
 
     async controlDni() {
       if (this.dniV != this.Alumno.dni) {
-        let dni = document.getElementById("Dni").value;
+        let dni = this.Alumno.dni;
 
         let result = await db
           .collection("Alumnos")
@@ -254,7 +254,7 @@ export default {
 
     async controlLibreta() {
       if (this.libretaV != this.Alumno.libreta) {
-        let libreta = document.getElementById("Libreta").value;
+        let libreta = this.Alumno.libreta;
 
         let result = await db
           .collection("Alumnos")
