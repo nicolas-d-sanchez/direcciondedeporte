@@ -96,6 +96,10 @@
                   <v-list-item>
                     <v-btn text small block @click="credencial(item)">Credencial</v-btn>
                   </v-list-item>
+                  <v-list-item >
+                    <!-- <v-btn text small block @click="foto = true">Cargar Foto</v-btn> -->
+                    <upload-image :id="item.id"></upload-image>
+                  </v-list-item>
                   <v-list-item v-if="!item.data().estado">
                     <v-btn text small block @click="Alta(item)">Alta Alumno</v-btn>
                   </v-list-item>
@@ -112,7 +116,7 @@
         </tbody>
       </v-simple-table>
     </v-flex>
-
+    
     <v-row justify="center">
       <v-dialog v-model="dialog" max-width="500" max-hight="400">
         <v-card>
@@ -132,14 +136,16 @@ import qrcode from "@/components/qr-code";
 import pdf from "@/components/pdf.vue";
 import EditAlumno from "@/components/EditAlumno.vue";
 import Turno from "@/components/Turno";
+import UploadImage from '@/components/UploadImage.vue';
 
 
 
 export default {
-  components: { RegistroAlumno, qrcode, EditAlumno, pdf ,Turno },
+  components: { RegistroAlumno, qrcode, EditAlumno, pdf ,Turno, UploadImage, },
 
   data() {
     return {
+      foto:false,
       dialog: false,
       dialog2: false,
       alumnos: [],facu: [],
@@ -157,6 +163,10 @@ export default {
   },
 
   methods: {
+    cargarFoto(){
+      this.foto = true
+    }, 
+
     async leer(){
      let ref =  await db.collection("Alumnos")
      ref.onSnapshot((querySnapshot) => {      

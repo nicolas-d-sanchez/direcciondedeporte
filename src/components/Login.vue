@@ -73,7 +73,7 @@
           <v-btn color="dark" text @click="doReset()">Restablecer</v-btn>
         </v-card-actions>
       </v-card>
-    </v-form>
+      </v-form>
 
     </v-dialog>
 

@@ -202,9 +202,7 @@ export default {
   methods: {
     save(date) {
       this.$refs.menu.save(date);
-      console.log(date);
-      this.datosAlumnos.fechaNac = timeF.fromDate(new Date(date))
-      console.log(this.datosAlumnos.fechaNac);
+      this.datosAlumnos.fechaNac = timeF.fromDate(new Date(date)) 
     },
 
     async controlDni() {
