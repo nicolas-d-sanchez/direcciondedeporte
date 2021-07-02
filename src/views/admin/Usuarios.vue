@@ -4,9 +4,9 @@
       <v-flex md6>
         <h1>Gestion De Usuarios</h1>
         <h5>
-          amet consectetur adipisicing elit. Quos optio, ducimus, perspiciatis
-          corrupti ipsa dolor labore ad deleniti rerum omnis, ullam cum
-          laboriosam nulla ipsum sunt vero enim b eatae ipsam!
+          Sección dedicada al control de los USUARIOS. En la misma podrá dar asignar el rol que corresponda una vez que se haya registrado con 
+          su email, 
+          así como también editar los datos si fuera necesario. 
         </h5>
       </v-flex>
 
@@ -88,7 +88,7 @@
                 <v-list dense>
                   <v-list-item>
                     <EditUser
-                      :User="item.data()"
+                      :datosUsuario="item.data()"
                       :id="item.id"
                     ></EditUser>
                   </v-list-item>                 

@@ -283,27 +283,31 @@
           </v-responsive>
 
           <v-theme-provider light>
+            <v-form ref="form" lazy-validation>
+
+            
             <v-row>
               <v-col cols="12">
-                <v-text-field flat label="Nombre*" v-model="Mensaje.Nombre" solo></v-text-field>
+                <v-text-field flat label="Nombre*" v-model="Mensaje.Nombre" :rules="textRules" solo></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-text-field flat label="Email*" v-model="Mensaje.Email" solo ></v-text-field>
+                <v-text-field flat label="Email*" v-model="Mensaje.Email" :rules="emailRules" solo ></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-text-field flat label="Asunto*" v-model="Mensaje.Asunto" solo ></v-text-field>
+                <v-text-field flat label="Asunto*" v-model="Mensaje.Asunto" :rules="textRules" solo ></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <v-textarea flat label="Mensaje*" v-model="Mensaje.Mensaje" solo ></v-textarea>
+                <v-textarea flat label="Mensaje*" v-model="Mensaje.Mensaje" :rules="textRules"  solo ></v-textarea>
               </v-col>
 
               <v-col class="mx-auto" cols="auto" >
                 <v-btn color="accent" x-large @click="AgregarMensaje" > Enviar </v-btn>
               </v-col>
             </v-row>
+            </v-form>
           </v-theme-provider>
         </v-container>
 
@@ -344,6 +348,15 @@ export default {
 
   data(){
     return{
+      textRules: [
+        (v) => !!v || "El campo es requerido",
+        
+      ],
+      
+      emailRules: [
+        (v) => !!v || "E-mail es requerido",
+        (v) => /.+@.+\..+/.test(v) || "E-mail debe ser valido",
+      ],
       logueado: false,
       currentUser: false,
       Mensaje:{
@@ -405,16 +418,21 @@ export default {
           confirmButtonText: 'Si, Estoy seguro!',
           cancelButtonText: "No, Cancelar!"
         }).then(r => {  
-      db.collection("Mensajes").add(
-        this.Mensaje
-        )
-        .then(function() {
-          window.location.reload();window.location.reload();
-          
-        })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
-        });
+
+          if (this.$refs.form.validate()) {
+            db.collection("Mensajes").add(
+              this.Mensaje
+              )
+              .then(function() {
+                window.location.reload();window.location.reload();
+                
+              })
+              .catch(function(error) {
+                console.error("Error writing document: ", error);
+              });
+              
+          }
+              
         });
     },
 

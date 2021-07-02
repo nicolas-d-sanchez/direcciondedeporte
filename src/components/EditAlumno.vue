@@ -246,6 +246,8 @@ export default {
           .then((querySnapshot) => {
             return querySnapshot.empty;
           });
+
+
         return result;
       } else {
         return true;
@@ -263,6 +265,7 @@ export default {
           .then((querySnapshot) => {
             return querySnapshot.empty;
           });
+          
         return result;
       } else {
         return true;
@@ -297,35 +300,36 @@ export default {
           confirmButtonText: "Si, Estoy seguro!",
           cancelButtonText: "No, Cancelar!",
         }).then((r) => {
-          if (resultDni && resultLibreta) {
-            var NombreN = this.Alumno.nombre;
-            var ApellidoN = this.Alumno.apellido;
-            var EmailN = this.Alumno.email;
-            var direccion = this.Alumno.direccion;
-            var sexo = this.Alumno.sexo;
-            var facultad = this.Alumno.facultad;
-            var libreta = this.Alumno.libreta;
-            var dni = this.Alumno.dni;
+          if (r.value == true) {
+            if (resultDni && resultLibreta) {
+              var NombreN = this.Alumno.nombre;
+              var ApellidoN = this.Alumno.apellido;
+              var EmailN = this.Alumno.email;
+              var direccion = this.Alumno.direccion;
+              var sexo = this.Alumno.sexo;
+              var facultad = this.Alumno.facultad;
+              var libreta = this.Alumno.libreta;
+              var dni = this.Alumno.dni;
 
-            
-            var AlumnosRef = db.collection("Alumnos").doc(this.id);
+              var AlumnosRef = db.collection("Alumnos").doc(this.id);
 
-            AlumnosRef.update({
-              nombre: NombreN,
-              apellido: ApellidoN,
-              email: EmailN,
-              direccion: direccion,
-              sexo: sexo,
-              facultad: facultad,
-              libreta: libreta,
-              dni: dni,
-            })
-              .then(() => this.$mount((this.dialog = false)))
-              .catch(function(error) {
-                console.error("Error Al Modifica Alumnos: ", error);
-              });
-          } else {
-            this.$alert("Verificar datos - Dni o Libreta existente");
+              AlumnosRef.update({
+                nombre: NombreN,
+                apellido: ApellidoN,
+                email: EmailN,
+                direccion: direccion,
+                sexo: sexo,
+                facultad: facultad,
+                libreta: libreta,
+                dni: dni,
+              })
+                .then(() => this.$mount((this.dialog = false)))
+                .catch(function(error) {
+                  console.error("Error Al Modifica Alumnos: ", error);
+                });
+            } else {
+              this.$alert("Verificar datos - Dni o Libreta existente");
+            }
           }
         });
       }

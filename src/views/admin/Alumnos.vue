@@ -4,9 +4,9 @@
       <v-flex md6>
         <h1>Gestion De Alumnos</h1>
         <h5>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos optio,
-          ducimus, perspiciatis corrupti ipsa dolor labore ad deleniti rerum
-          omnis, ullam cum laboriosam nulla ipsum sunt vero enim beatae ipsam!
+          Sección dedicada al control de los ALUMNOS. En la misma podrá permitir dar el alta a los alumnos después que se hayan registrado y 
+          completado los requisitos para hacer uso del gimnasio. Antes de dar el alta debe asignar un turno y 
+          cambiar la foto por la que corresponda. En caso de ser necesario podrá editar los datos o dar de baja. 
         </h5>
       </v-flex>
 
@@ -20,7 +20,7 @@
     </v-layout>
 
     <v-row>
-      <v-col sm="3" xl="3">
+      <v-col xs="12" sm="3" xl="3" >
         <v-text-field
           type="search"
           placefolder="Buscar"
@@ -29,8 +29,13 @@
         >
         </v-text-field>      
       </v-col>
-      <v-col sm="1" xl="1">
-        <v-btn color="grey lighten-5" small block @click="exportExcel()">Exportar a Excel</v-btn>
+        </v-row>
+        
+      <v-row align="right">
+       <v-spacer></v-spacer>
+      <v-col xs="12" sm="3" xl="1">
+        <v-btn  color="grey lighten-5" small block @click="exportExcel()">Exportar a Excel</v-btn>
+        
         <!-- <v-dialog v-model="dialog2" width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn small text  v-bind="attrs" v-on="on">
@@ -45,6 +50,9 @@
             <RegistroAlumno/>           
           </v-card>
         </v-dialog> -->
+      </v-col>
+      <v-col  xs="12" sm="3" xl="1">
+        <v-btn  color="red" small block @click="BajaTotal()">bajatotal</v-btn>
       </v-col>
     </v-row>
 
@@ -129,7 +137,7 @@
 
 <script>
 
-import XLSX from 'xlsx'
+import XLSX from 'xlsx';
 import RegistroAlumno from "@/components/RegistroAlumno";
 import { fb, db } from "@/components/FirebaseInit.js";
 import qrcode from "@/components/qr-code";
@@ -299,6 +307,51 @@ export default {
 
     activos(){
       this.buscar = true
+    },
+
+    BajaTotal(){   
+      this.$fire({
+          title: "Esta a punto de dar de baja a todos los alumnos esta seguro ?",
+          type: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',
+          confirmButtonText: 'Si, Estoy seguro!',
+          cancelButtonText: "No, Cancelar!",        
+   
+        }).then(r => {  
+            if (r.value == true){
+                this.$fire({
+                title: "Realmente esta seguro?",
+                type: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Si, Estoy seguro!',
+                cancelButtonText: "No, Cancelar!",        
+        
+              }).then(r => { 
+                if (r.value == true){
+                      const collection = db.collection("Alumnos")
+                      collection.where('estado', '==', true).get().then(response => {
+                          let batch = fb.firestore().batch()
+                          response.docs.forEach((doc) => {
+                              const docRef = fb.firestore().collection("Alumnos").doc(doc.id)
+                              batch.update(docRef,
+                                      {
+                                  estado: false,
+                                  }
+                              )
+                          })
+                          batch.commit().then(() => {
+                              this.$alert ('Se dieron de baja todos los alumnos')
+                          })
+                        })
+
+                }
+                        });
+          }
+
+
+      });
     }
 
   },

@@ -33,7 +33,7 @@
         <v-col cols="12" sm="12" md="12">
           <v-text-field
             type="password"
-            v-model="datosUsuario.password"
+            v-model="this.password"
             :rules="passwordRules"
             label="Password"
             required
@@ -138,12 +138,13 @@ export default {
       show1: false,
       tipoUsuario: ["Administrativo", "Profesor"],
       checkbox: "",
+      password: "",
       datosUsuario: {
         dni: "",
         nombre: "",
         apellido: "",
         email: "",
-        password: "",
+       
         tipoUsuario: "",
         estado: false,
         direccion: "",
@@ -225,7 +226,7 @@ export default {
                 fb.auth()
                   .createUserWithEmailAndPassword(
                     this.datosUsuario.email,
-                    this.datosUsuario.password
+                    this.password
                   )
                   .then((user) => {
                     db.collection("Usuarios")

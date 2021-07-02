@@ -2,11 +2,9 @@
   <v-container>
     <v-layout wrap>
       <v-flex xs12 md6>
-        <h1>Gestion De Usuarios</h1>
+        <h1>Gestion De Mensajes</h1>
         <h5>
-         amet consectetur adipisicing elit. Quos optio, ducimus,
-          perspiciatis corrupti ipsa dolor labore ad deleniti rerum omnis, ullam cum laboriosam nulla
-          ipsum sunt vero enim b      eatae ipsam!    
+         Sección destinada a los mensajes que llegan mediante el formulario de la página principal.   
         </h5>
       </v-flex>
       <v-flex>
