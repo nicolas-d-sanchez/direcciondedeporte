@@ -20,7 +20,7 @@
       </v-avatar>
 
       <v-toolbar-title class="font-weight-black headline">
-        Direccion de Deporte UNNE
+        Direccion de Deportes UNNE
       </v-toolbar-title>
       
       <v-spacer></v-spacer>
@@ -56,7 +56,7 @@
                       :class="[$vuetify.breakpoint.smAndDown ? 'display-2': 'display-3']"
                       class="font-weight-black"
                     >
-                      Direccion De Deporte
+                      Direccion De Deportes
                     </span>
 
                     <br>

@@ -8,7 +8,7 @@
       <v-toolbar-title
         class="font-weight-black headline"
         v-show="windowSize.x > 650"
-        >Direccion de Deporte UNNE
+        >Direccion de Deportes UNNE
       </v-toolbar-title>
 
       <v-toolbar-title

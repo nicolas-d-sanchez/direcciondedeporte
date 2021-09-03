@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog"  max-width="500px">
         <template v-slot:activator="{ on }">
-        <v-btn color="dark" small text v-on="on">Iniciar Sesion</v-btn>
+        <v-btn color="dark" small text v-on="on">Iniciar Sesion/Registrarse</v-btn>
         <v-btn color="dark" small text v-if="!loginM">LogOut</v-btn>
         </template>
       <v-form v-if="isLogin" class="formulario" ref="form" lazy-validation>
@@ -107,29 +107,29 @@ import RegistroGeneral from "@/components/RegistroGeneral.vue";
 
     methods:{
       login() {
-    if (this.$refs.form.validate()) {
-      if (this.email && this.password) {
-        fb
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(
-            () => {           
-                this.$fire({
-                title: "Bienvenido",
-                type: "success",
-                showConfirmButton: false,
-                timer: 1500
-              });
-              this.isOpen = false;
-              this.$router.push("/panel");
-            },
-            err => {
-              alert(err.message);
-            }
-          );
+          if (this.$refs.form.validate()) {
+            if (this.email && this.password) {
+              fb
+                .auth()
+                .signInWithEmailAndPassword(this.email, this.password)
+                .then(
+                  () => {           
+                      this.$fire({
+                      title: "Bienvenido",
+                      type: "success",
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                    this.isOpen = false;
+                    this.$router.push("/panel");
+                  },
+                  err => {
+                    alert(err.message);
+                  }
+                );
 
-      }}
-    },
+            }}
+          },
 
       async doReset(context ) {
       if (this.$refs.form.validate()) {
